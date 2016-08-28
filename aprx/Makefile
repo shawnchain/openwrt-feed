@@ -52,4 +52,11 @@ define Package/aprx/conffiles
 /etc/aprx.conf
 endef
 
+define Package/aprx/postinst
+#!/bin/sh
+if [ -e /etc/openwrt_release ]; then
+	/etc/init.d/aprx enable || :
+fi
+endef
+
 $(eval $(call BuildPackage,aprx))
