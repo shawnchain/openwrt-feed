@@ -1,0 +1,53 @@
+# A trimmed aprx configurations with TinyAPRS board
+# see /etc/aprx.conf.sample for full examples
+
+mycall  NOCALL
+
+myloc lat 3012.79N lon 12008.81E
+
+<aprsis>
+#login     OTHERCALL-7	# login defaults to $mycall
+passcode  00000 
+server    rotate.aprs2.net
+
+heartbeat-timeout   300    # 0 to disale of heartbeat timeout
+
+#filter "possibly multiple filter specs in quotes"
+filter "m/100"	     # My-Range filter: positions within 100 km from my location
+#filter "f/OH2XYZ-3/50"  # Friend-Range filter: 50 km of friend's last beacon position
+</aprsis>
+
+<logging>
+pidfile /var/run/aprx.pid
+rflog /var/log/aprx/aprx-rf.log
+aprxlog /var/log/aprx/aprx.log
+</logging>
+
+<interface>
+   serial-device /dev/ttyS0  9600 8n1    KISS
+   initstring "\x0dAT+KISS=1\x0d"
+#   #callsign     $mycall  # callsign defaults to $mycall
+#   #tx-ok        false    # transmitter enable defaults to false
+#    telem-to-is  false # set to 'false' to disable
+</interface>
+
+#<interface>
+#   serial-device /dev/ttyUSB0  9600 8n1    TNC2
+#   #callsign     $mycall  # callsign defaults to $mycall
+#   #tx-ok        false    # TNC2 monitor can not have transmitter
+#   #telem-to-is  true # set to 'false' to disable
+#</interface>
+
+
+# ***********  Multiple <beacon>  definitions can follow   *********
+<beacon>
+#
+#  Beacons are sent out to radio transmitters AND/OR APRSIS.
+#  Default is "both", other modes are settable.
+#
+#beaconmode { aprsis | both | radio }
+beaconmode aprsis
+#beacon symbol "R&" lat "0000.00N" lon "00000.00E" comment "Rx-only iGate"
+#beacon symbol "R&" $myloc comment "Rx-only iGate"
+beacon symbol "R&" $myloc comment "431.040MHz iGate/TinyAPRS"
+</beacon>
