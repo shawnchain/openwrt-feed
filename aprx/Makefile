@@ -42,7 +42,6 @@ define Package/aprx/install
 	$(INSTALL_BIN) ./files/etc/init.d/aprx.init $(1)/etc/init.d/aprx
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) ./files/etc/aprx.conf $(1)/etc/aprx.conf
-	$(INSTALL_CONF) ./files/etc/aprx.conf.sample $(1)/etc/aprx.conf.sample
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/aprx.conf $(1)/etc/aprx.conf.sample
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aprx $(1)/usr/sbin/
