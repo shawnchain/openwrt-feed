@@ -23,10 +23,10 @@ MD5_LOCAL=empty
 [ -f $LOCAL ] && MD5_LOCAL=`openssl md5 ${LOCAL} |awk '{print $2}'`
 echo "L: ${MD5_LOCAL}"
 echo "R: ${MD5_REMOTE}"
-if [ "${MD5_LOCAL}" == "${MD5_REMOTE}" ]
+if [ "${MD5_LOCAL}" = "${MD5_REMOTE}" ]
 then
   echo "Config not changed"
-  exit
+  exit 1
 fi
 
 echo "Updating ${LOCAL}..."
