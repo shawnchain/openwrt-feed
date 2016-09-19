@@ -34,7 +34,7 @@ define Package/tinyaprs/description
 	It then forwards appropriate packets to APRS-IS servers.
 endef
 
-TARGET_CFLAGS = -std=c99
+#TARGET_CFLAGS = -std=c99
 
 define Package/tinyaprs/install
 	$(INSTALL_DIR) $(1)/usr/sbin
