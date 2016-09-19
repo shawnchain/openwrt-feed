@@ -38,7 +38,7 @@ endef
 
 define Package/tinyaprs/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tinyaprs-gate $(1)/usr/sbin/tinyaprs
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/tinyaprs $(1)/usr/sbin/
 endef
 
 define Package/tinyaprs/conffiles
