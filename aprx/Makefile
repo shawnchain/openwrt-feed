@@ -40,6 +40,7 @@ CONFIGURE_ARGS += \
 define Package/aprx/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/etc/init.d/aprx.init $(1)/etc/init.d/aprx
+	$(INSTALL_BIN) ./files/etc/update-aprs-config $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) ./files/etc/aprx.conf $(1)/etc/aprx.conf
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/aprx.conf $(1)/etc/aprx.conf.sample
