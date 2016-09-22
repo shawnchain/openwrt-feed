@@ -8,12 +8,22 @@ SERVICE_USE_PID=0
 start() {
 	#mkdir -m 0755 -p /var/log/tinyaprs
 	#echo "Starting tinyaprs"
-	/usr/sbin/tinyaprs -d
+	if [ -e /etc/tinyaprs.conf ]; then
+		/usr/sbin/tinyaprs -d
+	else
+		echo "configuration file missing, daemon will not start"
+	fi
 }
 
 stop() {
-	PID=`cat /tmp/tinyaprs.pid`
-    kill $PID > /dev/null 2>&1
+	if [ -e /tmp/tinyaprs.pid ]; then
+		echo "Stopping"
+		PID=`cat /tmp/tinyaprs.pid`
+		kill $PID > /dev/null 2>&1
+		rm -f /tmp/tinyaprs.pid
+	else
+		echo "Not running"
+	fi
     #exit 0
 }
 
