@@ -18,12 +18,12 @@ do_update(){
 
   echo MyCall: ${CALL}
 
-  REMOTE=https://aprs.hamclub.net/openwrt/config/${CALL}.tinyaprs.conf
+  REMOTE=https://hamclub.net/openwrt/config/${CALL}.tinyaprs.conf
   LOCAL=/etc/tinyaprs.conf
   LOCAL_TEMP=/tmp/.tinyaprs.conf.upd
 
   rm -f ${LOCAL_TEMP}
-  wget -q  ${REMOTE} -O ${LOCAL_TEMP}
+  wget -q  ${REMOTE} -O ${LOCAL_TEMP} --no-check-certificate
   if [ $? -ne 0 ]
   then
     echo "remote config file is not found!"
