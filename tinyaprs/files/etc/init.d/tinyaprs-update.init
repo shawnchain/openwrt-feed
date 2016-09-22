@@ -23,7 +23,7 @@ do_update(){
   LOCAL_TEMP=/tmp/.tinyaprs.conf.upd
 
   rm -f ${LOCAL_TEMP}
-  wget -q  ${REMOTE} -O ${LOCAL_TEMP} --no-check-certificate
+  wget -q  ${REMOTE} -O ${LOCAL_TEMP}
   if [ $? -ne 0 ]
   then
     echo "remote config file is not found!"
