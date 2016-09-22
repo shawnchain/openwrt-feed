@@ -16,3 +16,8 @@ stop() {
     kill $PID > /dev/null 2>&1
     exit 0
 }
+
+restart() {
+	stop
+	start
+}
