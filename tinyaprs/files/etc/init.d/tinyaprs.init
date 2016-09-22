@@ -3,7 +3,7 @@
 
 START=99
 
-SERVICE_USE_PID=1
+SERVICE_USE_PID=0
 
 start() {
 	#mkdir -m 0755 -p /var/log/tinyaprs
