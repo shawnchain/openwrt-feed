@@ -42,12 +42,9 @@ define Package/tinyaprs/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/etc/init.d/tinyaprs-update.init $(1)/etc/init.d/tinyaprs-update
 	$(INSTALL_BIN) ./files/etc/init.d/tinyaprs.init $(1)/etc/init.d/tinyaprs
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_CONF) ./files/etc/tinyaprs.conf $(1)/etc/tinyaprs.conf
 endef
 
 define Package/tinyaprs/conffiles
-/etc/tinyaprs.conf
 endef
 
 define Package/tinyaprs/postinst
