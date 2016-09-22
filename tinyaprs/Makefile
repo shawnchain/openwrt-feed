@@ -50,6 +50,10 @@ define Package/tinyaprs/conffiles
 endef
 
 define Package/tinyaprs/postinst
+#!/bin/sh
+if [ -e /etc/openwrt_release ]; then
+	/etc/init.d/tinyaprs enable || :
+fi
 endef
 
 $(eval $(call BuildPackage,tinyaprs))
