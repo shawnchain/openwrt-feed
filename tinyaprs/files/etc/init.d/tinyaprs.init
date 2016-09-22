@@ -6,12 +6,11 @@ START=99
 SERVICE_USE_PID=1
 
 start() {
-	mkdir -m 0755 -p /var/log/tinyaprs
-	echo "not implemented yet"
-	#service_start /usr/sbin/tinyaprs
+	#mkdir -m 0755 -p /var/log/tinyaprs
+	#echo "Starting tinyaprs"
+	/usr/sbin/tinyaprs -d
 }
 
 stop() {
 	killall tinyaprs
-	#service_stop /usr/sbin/tinyaprs
 }
