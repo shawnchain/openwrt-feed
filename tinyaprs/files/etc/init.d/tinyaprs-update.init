@@ -11,14 +11,18 @@ SERVICE_USE_PID=0
 do_update(){
   #CALL=bg5hhp-12
   CALL=$1
+  MAC=`ifconfig eth0 | grep "HWaddr" | awk '{print $5}'`
+
   #[ -z $CALL -a -e /etc/openwrt_release ] && CALL=`uci get system.@system[0].hostname`
   [ -e /etc/openwrt_release ] && CALL=`uci get system.@system[0].hostname`
   #[ -z $CALL ] && CALL=`hostname -s`
   [ -z $CALL ] && echo "missing CALLSIGN" && exit
+  [ -z $MAC ] && echo "missing mac!"
 
   echo MyCall: ${CALL}
-
-  REMOTE=https://hamclub.net/openwrt/config/${CALL}.tinyaprs.conf
+  echo MyMAC: ${MAC}
+  
+  REMOTE=https://hamclub.net/openwrt/config/${CALL}.tinyaprs.conf?mac=${MAC}
   LOCAL=/etc/tinyaprs.conf
   LOCAL_TEMP=/tmp/.tinyaprs.conf.upd
 

@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tinyaprs
 PKG_REV:=HEAD
-PKG_VERSION:=0.5
+PKG_VERSION:=0.5.1
 PKG_RELEASE:=
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -52,6 +52,9 @@ define Package/tinyaprs/postinst
 if [ -e /etc/openwrt_release ]; then
 	/etc/init.d/tinyaprs-update enable || :
 	/etc/init.d/tinyaprs enable || :
+fi
+if [ -e /etc/init.d/aprx ]; then
+	/etc/init.d/aprx disable || :
 fi
 endef
 
