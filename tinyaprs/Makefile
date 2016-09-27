@@ -41,7 +41,6 @@ define Package/tinyaprs/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/tinyaprs $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/aprsutil $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/etc/init.d/tinyaprs-update.init $(1)/etc/init.d/tinyaprs-update
 	$(INSTALL_BIN) ./files/etc/init.d/tinyaprs.init $(1)/etc/init.d/tinyaprs
 endef
 
@@ -51,10 +50,10 @@ endef
 define Package/tinyaprs/postinst
 #!/bin/sh
 if [ -e /etc/openwrt_release ]; then
-	/etc/init.d/tinyaprs-update enable || :
 	/etc/init.d/tinyaprs enable || :
 fi
 if [ -e /etc/init.d/aprx ]; then
+	/etc/init.d/aprx stop || :
 	/etc/init.d/aprx disable || :
 fi
 endef

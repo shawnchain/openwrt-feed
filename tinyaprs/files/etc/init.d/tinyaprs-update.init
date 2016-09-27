@@ -11,10 +11,17 @@ SERVICE_USE_PID=0
 do_update(){
   #CALL=bg5hhp-12
   CALL=$1
-  MAC=`ifconfig eth0 | grep "HWaddr" | awk '{print $5}'`
+  MAC=$2
 
   #[ -z $CALL -a -e /etc/openwrt_release ] && CALL=`uci get system.@system[0].hostname`
-  [ -e /etc/openwrt_release ] && CALL=`uci get system.@system[0].hostname`
+  if [ -e /etc/openwrt_release ];then
+    CALL=`uci get system.@system[0].hostname`
+    MAC=`ifconfig eth0 | grep "HWaddr" | awk '{print $5}'`
+  else
+    CALL=`hostname -s`
+    MAC=`ifconfig |grep HWaddr |awk '{print $5}' |head -n 1`
+  fi
+  #[ -e /etc/openwrt_release ] && CALL=`uci get system.@system[0].hostname`
   #[ -z $CALL ] && CALL=`hostname -s`
   [ -z $CALL ] && echo "missing CALLSIGN" && exit
   [ -z $MAC ] && echo "missing mac!"
@@ -28,10 +35,9 @@ do_update(){
 
   rm -f ${LOCAL_TEMP}
   wget -q  ${REMOTE} -O ${LOCAL_TEMP}
-  if [ $? -ne 0 ]
-  then
-    echo "remote config file is not found!"
-    exit
+  if [ $? -ne 0 ];then
+    echo "remote config is not found!"
+    return 1
   fi
 
   MD5_REMOTE=`openssl md5 ${LOCAL_TEMP} |awk '{print $2}'`
@@ -42,7 +48,7 @@ do_update(){
   if [ "${MD5_LOCAL}" = "${MD5_REMOTE}" ]
   then
     echo "Config not changed"
-    exit 1
+    exit 0
   fi
 
   echo "Updating ${LOCAL}..."
@@ -52,7 +58,18 @@ do_update(){
 
 start() {
   echo "Updating config from network..."
-	do_update
+  i=0
+  while [ $i -le 5 ];do
+    i=$(($i+1))
+    do_update
+    if [ $? -ne 0 ];then
+      echo "Retring $i...";
+      sleep 5
+    else
+      exit 0
+    fi
+  done
+	
 }
 
 stop() {
