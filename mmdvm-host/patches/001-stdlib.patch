@@ -1,0 +1,30 @@
+--- mmdvm-host-1.0.0.orig/DMRNetwork.cpp	2017-09-14 17:52:21.964021996 +0800
++++ mmdvm-host-1.0.0/DMRNetwork.cpp	2017-09-14 18:02:17.778191355 +0800
+@@ -25,6 +25,7 @@
+
+ #include <cstdio>
+ #include <cassert>
++#include <stdlib.h>
+
+ const unsigned int BUFFER_LENGTH = 500U;
+
+--- mmdvm-host-1.0.0.orig/DStarNetwork.cpp	2017-09-14 17:52:21.964021996 +0800
++++ mmdvm-host-1.0.0/DStarNetwork.cpp	2017-09-14 18:02:29.457794143 +0800
+@@ -26,6 +26,7 @@
+ #include <cstdio>
+ #include <cassert>
+ #include <cstring>
++#include <stdlib.h>
+
+ const unsigned int BUFFER_LENGTH = 100U;
+
+--- mmdvm-host-1.0.0.orig/MMDVMHost.cpp	2017-09-14 17:52:21.968021834 +0800
++++ mmdvm-host-1.0.0/MMDVMHost.cpp	2017-09-14 18:02:43.441319574 +0800
+@@ -45,6 +45,7 @@
+
+ #include <cstdio>
+ #include <vector>
++#include <stdlib.h>
+
+ #if !defined(_WIN32) && !defined(_WIN64)
+ #include <sys/types.h>
