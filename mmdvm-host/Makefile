@@ -19,6 +19,7 @@ PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=svn
 
+#include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mmdvm-host
@@ -26,15 +27,40 @@ define Package/mmdvm-host
   CATEGORY:=Network
   TITLE:=MMDVM Host
   URL:=https://github.com/g4klx/MMDVMHost/
-  DEPENDS:=libpthread
+  DEPENDS:=+uclibc++ +libpthread
 endef
 
 define Package/mmdvm-host/description
 	The MMDVM Host for OpenWrt
 endef
 
-#TARGET_CFLAGS = -std=c99
-TARGET_CFLAGS = -std=c++0x
+define Build/Compile
+$(MAKE) -C $(PKG_BUILD_DIR) \
+        LIBS="-nodefaultlibs -lgcc -lc -luClibc++" \
+        LDFLAGS="$(EXTRA_LDFLAGS)" \
+        CXXFLAGS="$(TARGET_CFLAGS) $(EXTRA_CPPFLAGS) -nostdinc++" \
+        $(TARGET_CONFIGURE_OPTS) \
+        CROSS="$(TARGET_CROSS)" \
+        ARCH="$(ARCH)" \
+        ;
+endef
+
+TARGET_CFLAGS += -std=c++0x
+
+TARGET_CPPFLAGS += \
+
+#       -I$(ICONV_PREFIX)/include \
+#       -I$(INTL_PREFIX)/include \
+#       -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 \
+
+TARGET_LDFLAGS += \
+
+#       -Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+
+MAKE_FLAGS +=\
+        CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
+        LDFLAGS="$(TARGET_LDFLAGS)" \
+
 
 define Package/mmdvm-host/install
 	$(INSTALL_DIR) $(1)/usr/sbin
