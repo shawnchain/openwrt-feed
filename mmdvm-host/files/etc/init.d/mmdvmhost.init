@@ -1,0 +1,50 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2008-2011 OpenWrt.org
+
+START=99
+
+SERVICE_USE_PID=0
+
+do_start() {
+	#mkdir -m 0755 -p /var/log/mmdvm
+	#echo "Starting MMDVM Host"
+	if [ -e /etc/MMDVM.ini ]; then
+		/usr/sbin/MMDVMHost /etc/MMDVM.ini
+		echo $! >/tmp/mmdvmhost.pid
+		>&2 echo "MMDVMHost started"
+	else
+		>&2 echo "configuration file missing, MMDVMHost will not start"
+	fi
+}
+
+start() {
+	do_start
+}
+
+stop() {
+	if [ -e /tmp/mmdvmhost.pid ]; then
+		PID=`cat /tmp/mmdvmhost.pid`
+		kill $PID > /dev/null 2>&1
+		rm -f /tmp/mmdvmhost.pid
+		echo "MMDVM Host stopped"
+	else
+		echo "MMDVM Host is not running"
+	fi
+    return 0
+}
+
+restart() {
+	stop
+	start
+}
+
+#reload(){
+#  update
+#  if [ $? -ne 0 ];then
+#	echo "Update config failed.";
+#  else
+#	stop
+#	do_start
+#	break
+#  fi
+#}
