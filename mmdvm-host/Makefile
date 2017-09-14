@@ -27,7 +27,7 @@ define Package/mmdvm-host
   CATEGORY:=Network
   TITLE:=MMDVM Host
   URL:=https://github.com/g4klx/MMDVMHost/
-  DEPENDS:=+uclibc++ +libpthread
+  DEPENDS:=uclibc++ libpthread libstdcpp
 endef
 
 define Package/mmdvm-host/description
@@ -36,7 +36,7 @@ endef
 
 define Build/Compile
 $(MAKE) -C $(PKG_BUILD_DIR) \
-        LIBS="-nodefaultlibs -lgcc -lc -luClibc++" \
+        LIBS=" -lgcc -lc -luClibc++" \
         LDFLAGS="$(EXTRA_LDFLAGS)" \
         CXXFLAGS="$(TARGET_CFLAGS) $(EXTRA_CPPFLAGS) -nostdinc++" \
         $(TARGET_CONFIGURE_OPTS) \
