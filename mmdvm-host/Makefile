@@ -27,23 +27,23 @@ define Package/mmdvm-host
   CATEGORY:=Network
   TITLE:=MMDVM Host
   URL:=https://github.com/g4klx/MMDVMHost/
-  DEPENDS:=uclibc++ libpthread libstdcpp
+  DEPENDS:=+uclibcxx +libpthread +libstdcpp
 endef
 
 define Package/mmdvm-host/description
-	The MMDVM Host for OpenWrt
+	The MMDVMHost package for OpenWrt, by BG5HHP
 endef
 
-define Build/Compile
-$(MAKE) -C $(PKG_BUILD_DIR) \
-        LIBS=" -lgcc -lc -luClibc++" \
-        LDFLAGS="$(EXTRA_LDFLAGS)" \
-        CXXFLAGS="$(TARGET_CFLAGS) $(EXTRA_CPPFLAGS) -nostdinc++" \
-        $(TARGET_CONFIGURE_OPTS) \
-        CROSS="$(TARGET_CROSS)" \
-        ARCH="$(ARCH)" \
-        ;
-endef
+#define Build/Compile
+#$(MAKE) -C $(PKG_BUILD_DIR) \
+#        LIBS=" -lgcc -lc -luClibc++" \
+#        LDFLAGS="$(EXTRA_LDFLAGS)" \
+#        CXXFLAGS="$(TARGET_CFLAGS) $(EXTRA_CPPFLAGS) -nostdinc++" \
+#        $(TARGET_CONFIGURE_OPTS) \
+#        CROSS="$(TARGET_CROSS)" \
+#        ARCH="$(ARCH)" \
+#        ;
+#endef
 
 TARGET_CFLAGS += -std=c++0x
 
@@ -54,23 +54,23 @@ TARGET_CPPFLAGS += \
 #       -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 \
 
 TARGET_LDFLAGS += \
-
-#       -Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+       -Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
 
 MAKE_FLAGS +=\
         CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
         LDFLAGS="$(TARGET_LDFLAGS)" \
 
-
 define Package/mmdvm-host/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/MMDVMHost $(1)/usr/sbin/
-#	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/aprsutil $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_CONF) ./files/etc/MMDVM.ini $(1)/etc/MMDVM.ini	
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/etc/init.d/mmdvmhost.init $(1)/etc/init.d/mmdvmhost
 endef
 
 define Package/mmdvm-host/conffiles
+	/etc/MMDVM.ini
 endef
 
 define Package/mmdvm-host/postinst
@@ -80,4 +80,4 @@ if [ -e /etc/openwrt_release ]; then
 fi
 endef
 
-$(eval $(call BuildPackage,mmdvm-host))
+$(eval $(call BuildPackage,mmdvm-host,+uclibcxx,+libpthread,+libstdc++))
