@@ -7,14 +7,14 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=mmdvm-host
+PKG_NAME:=ysf-clients
 PKG_REV:=HEAD
 PKG_VERSION:=1.0.0
 PKG_RELEASE:=
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=https://github.com/g4klx/MMDVMHost/trunk
-#PKG_SOURCE_URL:=https://github.com/g4klx/MMDVMHost/tags/1.0
+PKG_SOURCE_URL:=https://github.com/g4klx/YSFClients/trunk
+#PKG_SOURCE_URL:=https://github.com/g4klx/YSFClients/tags/1.0
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=svn
@@ -22,16 +22,18 @@ PKG_SOURCE_PROTO:=svn
 #include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
-define Package/mmdvm-host
+#YSFPackages
+define Package/ysf-clients
   SECTION:=net
   CATEGORY:=Network
-  TITLE:=MMDVM Host
-  URL:=https://github.com/g4klx/MMDVMHost/
+  TITLE:=YSFClients
+  URL:=https://github.com/g4klx/YSFClients/
   DEPENDS:=+uclibcxx +libpthread +libstdcpp
 endef
 
-define Package/mmdvm-host/description
-	The MMDVMHost package for OpenWrt, by BG5HHP
+define Package/ysf-clients/description
+	The YSFClient package including YSFGateway,YSFParrot and YSFReflector.
+	Build for OpenWrt, by BG5HHP
 endef
 
 #define Build/Compile
@@ -60,25 +62,37 @@ MAKE_FLAGS +=\
         CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
         LDFLAGS="$(TARGET_LDFLAGS)" \
 
-define Package/mmdvm-host/install
+define Package/ysf-clients/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/MMDVMHost $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/YSFGateway/YSFGateway $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_CONF) ./files/etc/MMDVM.ini $(1)/etc/MMDVM.ini	
+	$(INSTALL_CONF) ./files/etc/YSFGateway.ini $(1)/etc/YSFGateway.ini	
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/etc/init.d/mmdvmhost.init $(1)/etc/init.d/mmdvmhost
+	$(INSTALL_BIN) ./files/etc/init.d/ysfgateway.init $(1)/etc/init.d/ysfgateway
+
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/YSFParrot/YSFParrot $(1)/usr/sbin/
+
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/YSFReflector/YSFReflector $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_CONF) ./files/etc/YSFReflector.ini $(1)/etc/YSFReflector.ini
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/etc/init.d/ysfreflector.init $(1)/etc/init.d/ysfreflector
+
 endef
 
-define Package/mmdvm-host/conffiles
-	/etc/MMDVM.ini
+define Package/ysf-clients/conffiles
+	/etc/YSFGateway.ini
+	/etc/YSFReflector.ini
 endef
 
-define Package/mmdvm-host/postinst
+define Package/ysf-clients/postinst
 #!/bin/sh
 if [ -e /etc/openwrt_release ]; then
-	/etc/init.d/mmdvmhost enable || :
-	/usr/sbin/useradd mmdvm || :
+#	/etc/init.d/ysf-gateway enable || :
+#	/usr/sbin/useradd mmdvm || :
 fi
 endef
 
-$(eval $(call BuildPackage,mmdvm-host,+uclibcxx,+libpthread,+libstdc++))
+$(eval $(call BuildPackage,ysf-clients,+uclibcxx,+libpthread,+libstdc++))
