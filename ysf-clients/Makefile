@@ -72,6 +72,8 @@ define Package/ysf-clients/install
 
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/YSFParrot/YSFParrot $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/etc/init.d/ysfparrot.init $(1)/etc/init.d/ysfparrot
 
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/YSFReflector/YSFReflector $(1)/usr/sbin/
@@ -90,8 +92,9 @@ endef
 define Package/ysf-clients/postinst
 #!/bin/sh
 if [ -e /etc/openwrt_release ]; then
-#	/etc/init.d/ysf-gateway enable || :
-#	/usr/sbin/useradd mmdvm || :
+	/etc/init.d/ysfgateway enable || :
+	/etc/init.d/ysfparrot enable || :
+	/etc/init.d/ysfreflector disable || :
 fi
 endef
 
