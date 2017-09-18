@@ -7,10 +7,11 @@ SERVICE_USE_PID=0
 
 
 USER=mmdvm
-PKG_NAME=YSFGateway
-BIN_FILE=/usr/sbin/YSFGateway
-CONF_FILE=/etc/YSFGateway.ini
-PID_FILE=/tmp/ysfgateway.pid
+PKG_NAME=YSFParrot
+BIN_FILE=/usr/sbin/YSFParrot
+#CONF_FILE=/etc/YSFGateway.ini
+PORT=41012
+PID_FILE=/tmp/ysfparrot.pid
 
 do_start() {
         #mkdir -m 0755 -p /var/log/mmdvm
@@ -23,14 +24,8 @@ do_start() {
         fi
 
         #echo "Starting ${PKG_NAME}"
-        if [ -e ${CONF_FILE} ]; then
-                ${BIN_FILE} ${CONF_FILE}
-                PID=`pidof ${PKG_NAME}`
-                echo ${PID} >${PID_FILE}
-                >&2 echo "${PKG_NAME} started"
-        else
-                >&2 echo "configuration file missing, ${PKG_NAME} will not start."
-        fi
+        ${BIN_FILE} -n ${PORT}a >/dev/null 2>&1 &
+        echo $! >${PID_FILE}
 }
 
 start() {
