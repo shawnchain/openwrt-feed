@@ -10,7 +10,7 @@ USER=mmdvm
 PKG_NAME=YSFParrot
 BIN_FILE=/usr/sbin/YSFParrot
 #CONF_FILE=/etc/YSFGateway.ini
-PORT=41012
+PORT=42012
 PID_FILE=/tmp/ysfparrot.pid
 
 do_start() {
