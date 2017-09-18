@@ -5,16 +5,26 @@ START=99
 
 SERVICE_USE_PID=0
 
+USER=mmdvm
+
 do_start() {
-	#mkdir -m 0755 -p /var/log/mmdvm
-	#echo "Starting MMDVM Host"
-	if [ -e /etc/MMDVM.ini ]; then
-		/usr/sbin/MMDVMHost /etc/MMDVM.ini
-		echo $! >/tmp/mmdvmhost.pid
-		>&2 echo "MMDVMHost started"
-	else
-		>&2 echo "configuration file missing, MMDVMHost will not start"
-	fi
+        #mkdir -m 0755 -p /var/log/mmdvm
+
+        #check mmdvm user and fix the tty permission
+        if id "${USER}" >/dev/null 2>&1; then
+                [ -e /dev/ttyACM0 ] && chown mmdvm /dev/ttyACM0 && echo "ttyACM0 found and fixed"
+        else
+                echo "user ${USER} does not exist, MMDVMHost will not start." && exit;
+        fi
+
+        #echo "Starting MMDVM Host"
+        if [ -e /etc/MMDVM.ini ]; then
+                /usr/sbin/MMDVMHost /etc/MMDVM.ini
+                echo $! >/tmp/mmdvmhost.pid
+                >&2 echo "MMDVMHost started"
+        else
+                >&2 echo "configuration file missing, MMDVMHost will not start."
+        fi
 }
 
 start() {

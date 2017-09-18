@@ -77,6 +77,7 @@ define Package/mmdvm-host/postinst
 #!/bin/sh
 if [ -e /etc/openwrt_release ]; then
 	/etc/init.d/mmdvmhost enable || :
+	/usr/sbin/useradd || :
 fi
 endef
 
