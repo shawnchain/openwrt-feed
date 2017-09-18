@@ -26,7 +26,7 @@ define Package/aprx
   CATEGORY:=Network
   TITLE:=APRS RX only I-gate
   URL:=http://ham.zmailer.org/oh2mqk/aprx/
-  DEPENDS:=libpthread
+  DEPENDS:=+libpthread
 endef
 
 define Package/aprx/description
@@ -60,4 +60,4 @@ if [ -e /etc/openwrt_release ]; then
 fi
 endef
 
-$(eval $(call BuildPackage,aprx))
+$(eval $(call BuildPackage,aprx,+libpthread))
