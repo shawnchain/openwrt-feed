@@ -7,13 +7,13 @@
 +.p25-parrot:
 +	make -C P25Parrot
 +
-+all: .ysf-gateway .ysf-parrot
++all: .p25-gateway .p25-parrot
 +
 +clean:
-+	make -C YSFGateway clean
-+	make -C YSFParrot clean
++	make -C P25Gateway clean
++	make -C P25Parrot clean
 +
 +distclean:
-+	make -C YSFGateway distclean
-+	make -C YSFParrot distclean
++	make -C P25Gateway distclean
++	make -C P25Parrot distclean
 +
