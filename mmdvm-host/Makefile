@@ -63,9 +63,9 @@ MAKE_FLAGS +=\
 define Package/mmdvm-host/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/MMDVMHost $(1)/usr/sbin/
-	$(INSTALL_BIN) ./files/usr/sbin/mmdvm_remote.sh $(1)/usr/sbin/
-	$(INSTALL_BIN) ./files/usr/sbin/mmdvm_update_dmrid.sh $(1)/usr/sbin/
-	$(INSTALL_BIN) ./files/usr/sbin/mmdvm_update_dmrid_bm.sh $(1)/usr/sbin/
+	$(INSTALL_BIN) ./files/usr/sbin/mmdvm-remote.sh $(1)/usr/sbin/
+	$(INSTALL_BIN) ./files/usr/sbin/mmdvm-update-dmrid.sh $(1)/usr/sbin/
+	$(INSTALL_BIN) ./files/usr/sbin/mmdvm-update-dmrid-bm.sh $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) ./files/etc/MMDVM.ini $(1)/etc/MMDVM.ini
 	$(INSTALL_DIR) $(1)/etc/mmdvm
