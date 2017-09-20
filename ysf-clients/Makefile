@@ -81,6 +81,8 @@ define Package/ysf-clients/install
 	$(INSTALL_CONF) ./files/etc/YSFReflector.ini $(1)/etc/YSFReflector.ini
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/etc/init.d/ysfreflector.init $(1)/etc/init.d/ysfreflector
+	$(INSTALL_DIR) $(1)/etc/mmdvm
+	$(INSTALL_CONF) ./files/etc/mmdvm/YSFHosts.txt $(1)/etc/mmdvm/
 
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) ./files/usr/sbin/YSFHostsupdate.sh $(1)/usr/sbin/
