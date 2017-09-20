@@ -83,7 +83,7 @@ define Package/ysf-clients/install
 	$(INSTALL_BIN) ./files/etc/init.d/ysfreflector.init $(1)/etc/init.d/ysfreflector
 
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) ./files/usr/sbin/YSFHostsupdate $(1)/usr/sbin/
+	$(INSTALL_BIN) ./files/usr/sbin/YSFHostsupdate.sh $(1)/usr/sbin/
 endef
 
 define Package/ysf-clients/conffiles
