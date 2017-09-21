@@ -9,15 +9,16 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mmdvm-host
 PKG_REV:=HEAD
-PKG_VERSION:=1.0.0
+#PKG_REV:=139be05
+PKG_VERSION:=BG5HHP
 PKG_RELEASE:=
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=https://github.com/g4klx/MMDVMHost/trunk
-#PKG_SOURCE_URL:=https://github.com/g4klx/MMDVMHost/tags/1.0
+PKG_SOURCE_URL:=https://github.com/g4klx/MMDVMHost
+PKG_SOURCE_DATE:=2017-09-20
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
-PKG_SOURCE_PROTO:=svn
+PKG_SOURCE_PROTO:=git
 
 #include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
@@ -47,11 +48,10 @@ endef
 
 TARGET_CFLAGS += -std=c++0x
 
-TARGET_CPPFLAGS += \
-
-#       -I$(ICONV_PREFIX)/include \
-#       -I$(INTL_PREFIX)/include \
-#       -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 \
+ifeq ($(ARCH),mips)
+	TARGET_CFLAGS += -DWORDS_BIGENDIAN=1
+	TARGET_CPPFLAGS += -DWORDS_BIGENDIAN=1
+endif
 
 TARGET_LDFLAGS += \
        -Wl,-rpath-link=$(STAGING_DIR)/usr/lib \

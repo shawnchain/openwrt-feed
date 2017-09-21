@@ -9,15 +9,16 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ysf-clients
 PKG_REV:=HEAD
-PKG_VERSION:=1.0.0
+#PKG_REV:=139be05
+PKG_VERSION:=BG5HHP
 PKG_RELEASE:=
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=https://github.com/g4klx/YSFClients/trunk
-#PKG_SOURCE_URL:=https://github.com/g4klx/YSFClients/tags/1.0
+PKG_SOURCE_URL:=https://github.com/g4klx/YSFClients
+PKG_SOURCE_DATE:=2017-09-20
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
-PKG_SOURCE_PROTO:=svn
+PKG_SOURCE_PROTO:=git
 
 #include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
