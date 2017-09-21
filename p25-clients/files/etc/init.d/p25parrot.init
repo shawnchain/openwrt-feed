@@ -10,7 +10,7 @@ USER=mmdvm
 PKG_NAME=P25Parrot
 BIN_FILE=/usr/sbin/P25Parrot
 #CONF_FILE=/etc/YSFGateway.ini
-PORT=42012
+PORT=42011
 PID_FILE=/tmp/p25parrot.pid
 
 do_start() {
