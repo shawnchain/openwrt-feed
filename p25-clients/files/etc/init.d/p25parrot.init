@@ -24,7 +24,7 @@ do_start() {
         fi
 
         #echo "Starting ${PKG_NAME}"
-        ${BIN_FILE} -n ${PORT}a >/dev/null 2>&1 &
+        ${BIN_FILE} -n ${PORT} >/dev/null 2>&1 &
         echo $! >${PID_FILE}
         >&2 echo "${PKG_NAME} started"
 }
