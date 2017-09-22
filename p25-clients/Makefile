@@ -65,7 +65,7 @@ define Package/p25-clients/install
 	$(INSTALL_BIN) ./files/etc/init.d/p25parrot.init $(1)/etc/init.d/p25parrot
 
 	$(INSTALL_DIR) $(1)/etc/mmdvm
-	$(INSTALL_BIN) ./files/etc/mmdvm/P25Hosts.txt $(1)/etc/mmdvm/
+	$(INSTALL_CONF) ./files/etc/mmdvm/P25Hosts.txt $(1)/etc/mmdvm/
 
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) ./files/usr/sbin/P25Hostsupdate.sh $(1)/usr/sbin/
