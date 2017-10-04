@@ -1,4 +1,3 @@
-diff -ur origin/CRC.cpp patched/CRC.cpp
 --- origin/CRC.cpp	2017-10-04 22:39:49.284442841 +0800
 +++ patched/CRC.cpp	2017-10-04 22:43:16.576442841 +0800
 @@ -60,26 +60,23 @@
