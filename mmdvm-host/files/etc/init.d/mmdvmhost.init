@@ -1,5 +1,8 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2008-2011 OpenWrt.org
+# Copyright (C) 2017 BG5HHP
+
+# This script needs shadow-useradd and openssl-util installed currently
 
 START=99
 
@@ -8,18 +11,95 @@ SERVICE_USE_PID=0
 USER=mmdvm
 PKG_NAME=MMDVMHost
 BIN_FILE=/usr/sbin/MMDVMHost
-CONF_FILE=/etc/MMDVM.ini
+CONF_NAME=MMDVM.ini
+CONF_FILE=/etc/${CONF_NAME}
+TMP_CONF_FILE=/tmp/.MMDVM.ini.upd
 PID_FILE=/tmp/mmdvmhost.pid
+MD5_TOOL='/usr/bin/openssl md5'
+SERVER_URL='https://hamclub.net/openwrt/config'
+
+do_update(){
+  CALL=$1
+  MAC=$2
+
+  if [ -e /etc/openwrt_release ];then
+    CALL=`uci get system.@system[0].hostname`
+    MAC=`ifconfig eth0 | grep "HWaddr" | awk '{print $5}'`
+  else
+    CALL=`hostname -s`
+    MAC=`ifconfig |grep HWaddr |awk '{print $5}' |head -n 1`
+  fi
+  [ -z $CALL ] && echo "missing CALLSIGN" && exit
+  [ -z $MAC ] && echo "missing mac!"
+
+  echo MyCall: ${CALL}
+  echo MyMAC: ${MAC}
+
+  REMOTE=${SERVER_URL}/${CALL}.${CONF_NAME}?mac=${MAC//:/}
+
+  echo "Retrieving ${REMOTE}..."
+  rm -f ${TMP_CONF_FILE}
+  wget -q  ${REMOTE} -O ${TMP_CONF_FILE}
+  if [ $? -ne 0 ];then
+    echo "failed to get remote config!"
+    return 1
+  fi
+
+  MD5_REMOTE=`${MD5_TOOL} ${TMP_CONF_FILE} |awk '{print $2}'`
+  MD5_LOCAL=empty
+  [ -f $CONF_FILE ] && MD5_LOCAL=`${MD5_TOOL} ${CONF_FILE} |awk '{print $2}'`
+  echo "L: ${MD5_LOCAL}"
+  echo "R: ${MD5_REMOTE}"
+  if [ "${MD5_LOCAL}" = "${MD5_REMOTE}" ];then
+    echo "Config is not changed"
+    return 0
+  fi
+
+  # finally overwrite the local configuration file
+  echo "Updating ${CONF_FILE}..."
+  cp -f ${TMP_CONF_FILE} ${CONF_FILE}
+  [ $? -eq 0 ] || echo "Update failed!"
+}
+
+check_update() {
+  echo "Updating config from network..."
+  i=0
+  if [ $1 -eq 0 ];then
+    $1=5
+  fi
+
+  while [ $i -le $1 ];do
+    i=$(($i+1))
+    do_update
+    if [ $? -ne 0 ];then
+      echo "Retring $i...";
+      sleep 5
+    else
+      return 0
+    fi
+  done
+  return 1
+}
 
 do_start() {
+        # check if service is running
+        if [ -e ${PID_FILE} ]; then
+                PID=`pidof ${PKG_NAME}`
+                if [ $PID -ne 0 ]; then
+                        echo "${PKG_NAME} is running"
+                        return 0
+                fi
+        fi
+
         #mkdir -m 0755 -p /var/log/mmdvm
 
         #check mmdvm user and fix the tty permission
         if id "${USER}" >/dev/null 2>&1; then
                 echo "user check ok"
-                [ -e /dev/ttyACM0 ] && chown mmdvm /dev/ttyACM0 && echo "ttyACM0 found and fixed"
+                [ -e /dev/ttyACM0 ] && chown ${USER} /dev/ttyACM0 && echo "ttyACM0 found and fixed"
+                [ -e /dev/ttyS1 ] && chown ${USER} /dev/ttyS1 && echo "ttyS1 found and fixed"
         else
-                echo "user ${USER} does not exist, MMDVMHost will not start." && exit;
+                echo "user ${USER} does not exist, ${PKG_NAME} will not start." && exit;
         fi
 
         #echo "Starting MMDVM Host"
@@ -34,33 +114,23 @@ do_start() {
 }
 
 start() {
-	do_start
+        check_update 5
+        do_start
 }
 
 stop() {
-	if [ -e ${PID_FILE} ]; then
-		PID=`cat ${PID_FILE}`
-		kill $PID > /dev/null 2>&1
-		rm -f ${PID_FILE}
-		echo "${PKG_NAME} stopped"
-	else
-		echo "${PKG_NAME} is not running"
-	fi
-    return 0
+        if [ -e ${PID_FILE} ]; then
+                PID=`cat ${PID_FILE}`
+                kill $PID > /dev/null 2>&1
+                rm -f ${PID_FILE}
+                echo "${PKG_NAME} stopped"
+        else
+                echo "${PKG_NAME} is not running"
+        fi
+        return 0
 }
 
 restart() {
-	stop
-	start
+        stop
+        start
 }
-
-#reload(){
-#  update
-#  if [ $? -ne 0 ];then
-#	echo "Update config failed.";
-#  else
-#	stop
-#	do_start
-#	break
-#  fi
-#}
