@@ -9,8 +9,8 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mmdvm-host
 #PKG_REV:=HEAD
-PKG_REV:=f176d6c
-PKG_VERSION:=BG5HHP-20171115
+PKG_REV:=e03c448
+PKG_VERSION:=BG5HHP-20171117
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -46,7 +46,7 @@ endef
 #        ;
 #endef
 
-TARGET_CFLAGS += -std=c++0x
+TARGET_CFLAGS += -std=c++0x -D_OPENWRT=1
 
 ifeq ($(ARCH),mips)
 	TARGET_CFLAGS += -DWORDS_BIGENDIAN=1
