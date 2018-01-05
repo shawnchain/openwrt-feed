@@ -28,7 +28,7 @@ define Package/p25-clients
   CATEGORY:=Network
   TITLE:=P25Clients
   URL:=https://github.com/g4klx/P25Clients/
-  DEPENDS:=+uclibcxx +libpthread +libstdcpp
+  DEPENDS:=+libpthread +libstdcpp
 endef
 
 define Package/p25-clients/description
@@ -92,4 +92,4 @@ if [ -e /etc/openwrt_release ]; then
 fi
 endef
 
-$(eval $(call BuildPackage,p25-clients,+uclibcxx,+libpthread,+libstdc++))
+$(eval $(call BuildPackage,p25-clients,+libpthread,+libstdc++))
