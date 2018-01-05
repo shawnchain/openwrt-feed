@@ -1,0 +1,66 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2008-2011 OpenWrt.org
+
+START=99
+
+SERVICE_USE_PID=0
+
+
+USER=mmdvm
+PKG_NAME=P25Reflector
+BIN_FILE=/usr/sbin/P25Reflector
+CONF_FILE=/etc/P25Reflector.ini
+PID_FILE=/tmp/p25reflector.pid
+
+do_start() {
+        #mkdir -m 0755 -p /var/log/mmdvm
+
+        #check mmdvm user
+        if id "${USER}" >/dev/null 2>&1; then
+                echo "user check ok"
+        else
+                echo "user ${USER} does not exist, ${PKG_NAME} will not start." && exit;
+        fi
+
+        #echo "Starting ${PKG_NAME}"
+        if [ -e ${CONF_FILE} ]; then
+                ${BIN_FILE} ${CONF_FILE}
+                PID=`pidof ${PKG_NAME}`
+                echo ${PID} >${PID_FILE}
+                >&2 echo "${PKG_NAME} started"
+        else
+                >&2 echo "configuration file missing, ${PKG_NAME} will not start."
+        fi
+}
+
+start() {
+	do_start
+}
+
+stop() {
+	if [ -e ${PID_FILE} ]; then
+		PID=`cat ${PID_FILE}`
+		kill $PID > /dev/null 2>&1
+		rm -f ${PID_FILE}
+		echo "${PKG_NAME} stopped"
+	else
+		echo "${PKG_NAME} is not running"
+	fi
+    return 0
+}
+
+restart() {
+	stop
+	start
+}
+
+#reload(){
+#  update
+#  if [ $? -ne 0 ];then
+#	echo "Update config failed.";
+#  else
+#	stop
+#	do_start
+#	break
+#  fi
+#}

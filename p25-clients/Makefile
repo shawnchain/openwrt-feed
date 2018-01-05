@@ -9,8 +9,8 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=p25-clients
 #PKG_REV:=HEAD
-PKG_REV:=430600b
-PKG_VERSION:=BG5HHP-20171126
+PKG_REV:=fd54404
+PKG_VERSION:=BG5HHP-20180105
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -64,8 +64,16 @@ define Package/p25-clients/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/etc/init.d/p25parrot.init $(1)/etc/init.d/p25parrot
 
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/P25Reflector/P25Reflector $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_CONF) ./files/etc/P25Reflector.ini $(1)/etc/P25Reflector.ini	
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/etc/init.d/p25reflector.init $(1)/etc/init.d/p25reflector
+
 	$(INSTALL_DIR) $(1)/etc/mmdvm
 	$(INSTALL_CONF) ./files/etc/mmdvm/P25Hosts.txt $(1)/etc/mmdvm/
+	$(INSTALL_CONF) ./files/etc/mmdvm/P25Hosts_private.txt $(1)/etc/mmdvm/
 
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) ./files/usr/sbin/P25Hostsupdate.sh $(1)/usr/sbin/
@@ -79,7 +87,8 @@ define Package/p25-clients/postinst
 #!/bin/sh
 if [ -e /etc/openwrt_release ]; then
 	/etc/init.d/p25gateway enable || :
-	/etc/init.d/p25parrot enable || :
+	/etc/init.d/p25parrot disable || :
+	/etc/init.d/p25reflector enable || :
 fi
 endef
 
