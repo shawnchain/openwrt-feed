@@ -28,7 +28,7 @@ define Package/mmdvm-host
   CATEGORY:=Network
   TITLE:=MMDVM Host
   URL:=https://github.com/g4klx/MMDVMHost/
-  DEPENDS:=+uclibcxx +libpthread +libstdcpp
+  DEPENDS:=+libpthread +libstdcpp
 endef
 
 define Package/mmdvm-host/description
@@ -86,4 +86,4 @@ if [ -e /etc/openwrt_release ]; then
 fi
 endef
 
-$(eval $(call BuildPackage,mmdvm-host,+uclibcxx,+libpthread,+libstdc++))
+$(eval $(call BuildPackage,mmdvm-host,+libpthread,+libstdc++))
