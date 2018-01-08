@@ -50,7 +50,7 @@ endef
 define Package/tinyaprs/postinst
 #!/bin/sh
 if [ -e /etc/openwrt_release ]; then
-	/etc/init.d/tinyaprs enable || :
+	/etc/init.d/tinyaprs disable || :
 fi
 if [ -e /etc/init.d/aprx ]; then
 	/etc/init.d/aprx stop || :

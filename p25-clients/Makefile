@@ -86,9 +86,9 @@ endef
 define Package/p25-clients/postinst
 #!/bin/sh
 if [ -e /etc/openwrt_release ]; then
-	/etc/init.d/p25gateway enable || :
+	/etc/init.d/p25gateway disable || :
 	/etc/init.d/p25parrot disable || :
-	/etc/init.d/p25reflector enable || :
+	/etc/init.d/p25reflector disable || :
 fi
 endef
 

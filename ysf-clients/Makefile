@@ -96,8 +96,8 @@ endef
 define Package/ysf-clients/postinst
 #!/bin/sh
 if [ -e /etc/openwrt_release ]; then
-	/etc/init.d/ysfgateway enable || :
-	/etc/init.d/ysfparrot enable || :
+	/etc/init.d/ysfgateway disable || :
+	/etc/init.d/ysfparrot disable || :
 	/etc/init.d/ysfreflector disable || :
 fi
 endef
