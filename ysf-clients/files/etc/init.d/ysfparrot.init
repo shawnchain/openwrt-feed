@@ -53,37 +53,19 @@ check_running(){
 }
 
 do_start() {
-        check_running
-        if [ $? -eq 0 ]; then
-          return 0
-        fi
-
-        #echo "Starting MMDVM Host"
-        if [ -e ${CONF_FILE} ]; then
-                ${BIN_FILE} ${CONF_FILE}
-                echo "Starting..."
-                sleep 3
-                PID=`pidof ${PKG_NAME}`
-                if [ $? -eq 1 ]; then
-                    echo "Process does not exist, ${PKG_NAME} will not start."
-                    #rm ${CONF_FILE}
-                    exit 1
-                fi
-                echo ${PID} >${PID_FILE}
-                >&2 echo "${PKG_NAME} started"
-        else
-                >&2 echo "configuration file missing, ${PKG_NAME} will not start."
-        fi
+  ${BIN_FILE} -n ${PORT} >/dev/null 2>&1 &	
+  echo $! >${PID_FILE}	
+  >&2 echo "${PKG_NAME} started"
 }
 
 start() {
 	check_running
-        if [ $? -eq 0 ]; then
-          return 0
-        fi
-        #check_update 3
-        check_user        
-        do_start
+  if [ $? -eq 0 ]; then
+    return 0
+  fi
+  #check_update 3
+  check_user        
+  do_start
 }
 
 stop() {
