@@ -100,7 +100,7 @@ check_permission(){
   [ -f /dev/ttyACM0 ] && chown ${USER} /dev/ttyACM0 && echo "ttyACM0 found and fixed";
   [ -f /dev/ttyUSB0 ] && chown ${USER} /dev/ttyUSB0 && echo "ttyUSB0 found and fixed";
   [ -f /dev/ttyS1 ] && chown ${USER} /dev/ttyS1 && echo "ttyS1 found and fixed";
-  
+  [ -d /etc/mmdvm ] && chown -R ${USER} /etc/mmdvm
   if [ ! -d ${LOG_DIR} ]; then
     mkdir -m 755 -p ${LOG_DIR}
   fi
