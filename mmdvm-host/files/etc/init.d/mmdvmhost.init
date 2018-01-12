@@ -146,7 +146,6 @@ do_start() {
 start() {
         check_running
         if [ $? -eq 0 ]; then
-          #echo "${PKG_NAME} is running"
           return 0
         fi
 
