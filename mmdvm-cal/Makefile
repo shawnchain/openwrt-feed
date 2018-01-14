@@ -9,8 +9,8 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mmdvm-cal
 #PKG_REV:=HEAD
-PKG_REV:=d95665d
-PKG_VERSION:=BG5HHP-20171126
+PKG_REV:=f89561e
+PKG_VERSION:=BG5HHP-20180114
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -19,7 +19,6 @@ PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=git
 
-#include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mmdvm-cal
@@ -27,7 +26,7 @@ define Package/mmdvm-cal
   CATEGORY:=Network
   TITLE:=MMDVM Calibrate
   URL:=https://github.com/g4klx/MMDVMCal/
-  DEPENDS:=+uclibcxx +libpthread +libstdcpp
+  DEPENDS:=+libpthread +libstdcpp
 endef
 
 define Package/mmdvm-cal/description
@@ -59,4 +58,4 @@ endef
 define Package/mmdvm-cal/postinst
 endef
 
-$(eval $(call BuildPackage,mmdvm-cal,+uclibcxx,+libpthread,+libstdc++))
+$(eval $(call BuildPackage,mmdvm-cal,+libpthread,+libstdc++))
