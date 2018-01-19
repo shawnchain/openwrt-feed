@@ -91,8 +91,8 @@ if [ -e /etc/openwrt_release ]; then
 fi
 #crontab -l -u root  2>/dev/null |grep P25Hostsupdate >/dev/null
 #if [ $$? -ne 0 ]; then
-#	echo "5 0 * * * /usr/sbin/P25Hostsupdate.sh >/dev/null 2>&1 &" >>/etc/crontabs/root
-#	/etc/init.d/cron restart
+#	echo "5 0 * * * /usr/sbin/P25Hostsupdate.sh >/tmp/P25Hostsupdate.log 2>&1 &" >>/etc/crontabs/root
+#	/etc/init.d/cron restart || :
 #fi
 exit 0
 endef
