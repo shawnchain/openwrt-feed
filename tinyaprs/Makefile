@@ -56,6 +56,7 @@ if [ -e /etc/init.d/aprx ]; then
 	/etc/init.d/aprx stop || :
 	/etc/init.d/aprx disable || :
 fi
+exit 0
 endef
 
 $(eval $(call BuildPackage,tinyaprs))

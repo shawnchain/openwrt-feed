@@ -94,7 +94,7 @@ fi
 #	echo "5 0 * * * /usr/sbin/P25Hostsupdate.sh >/dev/null 2>&1 &" >>/etc/crontabs/root
 #	/etc/init.d/cron restart
 #fi
-
+exit 0
 endef
 
 $(eval $(call BuildPackage,p25-clients,+libpthread,+libstdc++))

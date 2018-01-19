@@ -88,6 +88,7 @@ if [ $? -ne 0 ]; then
 	echo "5 0 * * * /usr/sbin/mmdvm-update-dmrid-bm.sh >/tmp/mmdvm-update-dmrid-bm.log 2>&1 &" >>/etc/crontabs/root
 	/etc/init.d/cron restart || :
 fi
+exit 0
 endef
 
 $(eval $(call BuildPackage,mmdvm-host,+libpthread,+libstdc++))
