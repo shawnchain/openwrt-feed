@@ -84,7 +84,7 @@ if [ -e /etc/openwrt_release ]; then
 fi
 
 crontab -l -u root  2>/dev/null |grep mmdvm-update-dmrid-bm >/dev/null
-if [ $? -ne 0 ]; then
+if [ $$? -ne 0 ]; then
 	echo "5 0 * * * /usr/sbin/mmdvm-update-dmrid-bm.sh >/tmp/mmdvm-update-dmrid-bm.log 2>&1 &" >>/etc/crontabs/root
 	/etc/init.d/cron restart || :
 fi

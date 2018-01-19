@@ -101,7 +101,7 @@ if [ -e /etc/openwrt_release ]; then
 	/etc/init.d/ysfreflector disable || :
 fi
 crontab -l -u root  2>/dev/null |grep YSFHostsupdate >/dev/null
-if [ $? -ne 0 ]; then
+if [ $$? -ne 0 ]; then
 	echo "5 0 * * * /usr/sbin/YSFHostsupdate.sh >/tmp/YSFHostsupdate.sh 2>&1 &" >>/etc/crontabs/root
 	/etc/init.d/cron restart
 fi
