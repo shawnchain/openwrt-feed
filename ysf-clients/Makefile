@@ -100,10 +100,11 @@ if [ -e /etc/openwrt_release ]; then
 	/etc/init.d/ysfparrot disable || :
 	/etc/init.d/ysfreflector disable || :
 fi
-endef
 crontab -l -u root  2>/dev/null |grep YSFHostsupdate >/dev/null
 if [ $? -ne 0 ]; then
 	echo "5 0 * * * /usr/sbin/YSFHostsupdate.sh >/tmp/YSFHostsupdate.sh 2>&1 &" >>/etc/crontabs/root
 	/etc/init.d/cron restart
 fi
+endef
+
 $(eval $(call BuildPackage,ysf-clients,+uclibcxx,+libpthread,+libstdc++))
