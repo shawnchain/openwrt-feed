@@ -52,7 +52,7 @@
 YSFHOSTS=/etc/mmdvm/P25Hosts.txt
 
 # How many YSFHosts files do you want backed up (0 = do not keep backups) 
-YSFHOSTSFILEBACKUP=1
+YSFHOSTSFILEBACKUP=0
 
 ###############################################################################
 #
