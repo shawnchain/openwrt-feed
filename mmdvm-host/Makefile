@@ -75,12 +75,11 @@ define Package/mmdvm-host/postinst
 #!/bin/sh
 if [ -e /etc/openwrt_release ]; then
 	uci set mmdvm.@mmdvmhost[0].enabled=1 && uci commit mmdvm || :
-fi
-
-crontab -l -u root  2>/dev/null |grep mmdvm-update-dmrid-bm >/dev/null
-if [ $$? -ne 0 ]; then
-	echo "5 0 * * * /usr/sbin/mmdvm-update-dmrid-bm.sh >/tmp/mmdvm-update-dmrid-bm.log 2>&1 &" >>$(1)/etc/crontabs/root
-	/etc/init.d/cron restart || :
+	crontab -l -u root  2>/dev/null |grep mmdvm-update-dmrid-bm >/dev/null
+	if [ $$? -ne 0 ]; then
+		echo "5 0 * * * /usr/sbin/mmdvm-update-dmrid-bm.sh >/tmp/mmdvm-update-dmrid-bm.log 2>&1 &" >>/etc/crontabs/root
+		/etc/init.d/cron restart || :
+	fi
 fi
 exit 0
 endef
