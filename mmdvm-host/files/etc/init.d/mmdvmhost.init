@@ -16,7 +16,8 @@ CONF_FILE=/etc/${CONF_NAME}
 TMP_CONF_FILE=/tmp/.MMDVM.ini.upd
 PID_FILE=/tmp/mmdvmhost.pid
 LOG_DIR=/var/log/mmdvm
-MD5_TOOL='/usr/bin/openssl md5'
+#MD5_TOOL='/usr/bin/openssl md5'
+MD5_TOOL='/usr/bin/md5sum'
 SERVER_URL='https://hamclub.net/openwrt/config'
 
 do_update(){
@@ -46,9 +47,9 @@ do_update(){
     return 1
   fi
 
-  MD5_REMOTE=`${MD5_TOOL} ${TMP_CONF_FILE} |awk '{print $2}'`
+  MD5_REMOTE=`${MD5_TOOL} ${TMP_CONF_FILE} |awk '{print $1}'`
   MD5_LOCAL=empty
-  [ -f $CONF_FILE ] && MD5_LOCAL=`${MD5_TOOL} ${CONF_FILE} |awk '{print $2}'`
+  [ -f $CONF_FILE ] && MD5_LOCAL=`${MD5_TOOL} ${CONF_FILE} |awk '{print $1}'`
   echo "L: ${MD5_LOCAL}"
   echo "R: ${MD5_REMOTE}"
   if [ "${MD5_LOCAL}" = "${MD5_REMOTE}" ];then
@@ -98,20 +99,23 @@ check_user(){
 
 check_permission(){
   [ -f /dev/ttyACM0 ] && chown ${USER} /dev/ttyACM0 && echo "ttyACM0 found and fixed";
+  [ -f /dev/ttyACM1 ] && chown ${USER} /dev/ttyACM1 && echo "ttyACM1 found and fixed";
   [ -f /dev/ttyUSB0 ] && chown ${USER} /dev/ttyUSB0 && echo "ttyUSB0 found and fixed";
+  [ -f /dev/ttyUSB1 ] && chown ${USER} /dev/ttyUSB1 && echo "ttyUSB1 found and fixed";
   [ -f /dev/ttyS1 ] && chown ${USER} /dev/ttyS1 && echo "ttyS1 found and fixed";
+  [ -f /dev/ttyS2 ] && chown ${USER} /dev/ttyS2 && echo "ttyS2 found and fixed";
   [ -d /etc/mmdvm ] && chown -R ${USER} /etc/mmdvm
   if [ ! -d ${LOG_DIR} ]; then
     mkdir -m 755 -p ${LOG_DIR}
   fi
   chown -R ${USER} ${LOG_DIR}
-  echo "Check permission OK"
+  echo "Check permissions OK"
 }
 
 check_running(){
   # check if service is running
   if [ -e ${PID_FILE} ]; then
-    PID=`pidof ${PKG_NAME}`
+    local PID=`pidof ${PKG_NAME}`
     if [ $? -eq 0 ]; then
             echo "${PKG_NAME} is running"
             return 0
@@ -120,16 +124,27 @@ check_running(){
   return 1
 }
 
+# returns 1 if enabled or 0 disabled
+check_enabled(){
+  local enabled
+  enabled=`uci get mmdvm.@mmdvmhost[0].enabled 2>/dev/null`
+  if [ $enabled -eq 1 ]; then
+    return 1
+  else
+    return 0
+  fi
+}
+
 do_start() {
   if [ -e ${CONF_FILE} ]; then
     ${BIN_FILE} ${CONF_FILE}
     echo "Starting..."
     sleep 3
-    PID=`pidof ${PKG_NAME}`
+    local PID=`pidof ${PKG_NAME}`
     if [ $? -eq 1 ]; then
         echo "Process does not exist, ${PKG_NAME} will not start."
         #rm ${CONF_FILE}
-        exit 1
+        return 1
     fi
     echo ${PID} >${PID_FILE}
     >&2 echo "${PKG_NAME} started"
@@ -143,14 +158,20 @@ start() {
   if [ $? -eq 0 ]; then
     return 0
   fi
-  #check_update 3
-  check_user        
+  check_user
+  check_update 1
+
+  check_enabled
+  if [ $? -eq 0 ]; then
+    >&2 echo "${PKG_NAME} will not start because it's disabled"
+    return 1
+  fi
   do_start
 }
 
 stop() {
         if [ -e ${PID_FILE} ]; then
-                PID=`cat ${PID_FILE}`
+                local PID=`cat ${PID_FILE}`
                 kill $PID > /dev/null 2>&1
                 rm -f ${PID_FILE}
                 echo "${PKG_NAME} stopped"
@@ -163,4 +184,10 @@ stop() {
 restart() {
         stop
         start
+}
+
+EXTRA_COMMANDS="update"
+EXTRA_HELP="        update  Update the configurations from cloud"
+update(){
+  check_update 3
 }
