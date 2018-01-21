@@ -31,7 +31,8 @@ end
 function mmdvm_log_action()
         luci.http.prepare_content("text/plain")
         luci.http.write("-= MMDVMHost Log =-")
-        for aline in luci.util.execi("_log=/var/log/MMDVM-`date -I`.log;[ -f $_log ] && tail -n 10 $_log || echo \"No log file $_log\"") do
+        luci.http.write("\n...")
+        for aline in luci.util.execi("_log=/var/log/MMDVM-`date -I`.log;[ -f $_log ] && tail -n 50 $_log || echo \"No log file $_log\"") do
                 luci.http.write("\n" .. aline)
         end
 end
@@ -39,7 +40,8 @@ end
 function ysfgw_log_action()
         luci.http.prepare_content("text/plain")
         luci.http.write("-= YSF Gateway Log =-")
-        for aline in luci.util.execi("_log=/var/log/YSFGateway-`date -I`.log;[ -f $_log ] && tail -n 10 $_log || echo \"No log file $_log\"") do
+        luci.http.write("\n...")
+        for aline in luci.util.execi("_log=/var/log/YSFGateway-`date -I`.log;[ -f $_log ] && tail -n 50 $_log || echo \"No log file $_log\"") do
                 luci.http.write("\n" .. aline)
         end
 end
@@ -47,7 +49,8 @@ end
 function ysfrl_log_action()
         luci.http.prepare_content("text/plain")
         luci.http.write("-= YSF Reflector Log =-")
-        for aline in luci.util.execi("_log=/var/log/YSFReflector-`date -I`.log;[ -f $_log ] && tail -n 10 $_log || echo \"No log file $_log\"") do
+        luci.http.write("\n...")
+        for aline in luci.util.execi("_log=/var/log/YSFReflector-`date -I`.log;[ -f $_log ] && tail -n 50 $_log || echo \"No log file $_log\"") do
                 luci.http.write("\n" .. aline)
         end
 end
@@ -55,7 +58,8 @@ end
 function p25gw_log_action()
         luci.http.prepare_content("text/plain")
         luci.http.write("-= P25 Gateway Log =-")
-        for aline in luci.util.execi("_log=/var/log/P25Gateway-`date -I`.log;[ -f $_log ] && tail -n 10 $_log || echo \"No log file $_log\"") do
+        luci.http.write("\n...")
+        for aline in luci.util.execi("_log=/var/log/P25Gateway-`date -I`.log;[ -f $_log ] && tail -n 50 $_log || echo \"No log file $_log\"") do
                 luci.http.write("\n" .. aline)
         end
 end
@@ -63,7 +67,8 @@ end
 function p25rl_log_action()
         luci.http.prepare_content("text/plain")
         luci.http.write("-= P25 Reflector Log =-")
-        for aline in luci.util.execi("_log=/var/log/P25Reflector-`date -I`.log;[ -f $_log ] && tail -n 10 $_log || echo \"No log file $_log\"") do
+        luci.http.write("\n...")
+        for aline in luci.util.execi("_log=/var/log/P25Reflector-`date -I`.log;[ -f $_log ] && tail -n 50 $_log || echo \"No log file $_log\"") do
                 luci.http.write("\n" .. aline)
         end
 end
