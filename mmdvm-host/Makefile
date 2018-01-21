@@ -11,7 +11,7 @@ PKG_NAME:=mmdvm-host
 #PKG_REV:=HEAD
 PKG_REV:=606a7ae
 PKG_VERSION:=BG5HHP-20180114
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 #PKG_SOURCE_URL:=https://github.com/g4klx/MMDVMHost
@@ -62,25 +62,19 @@ MAKE_FLAGS +=\
 define Package/mmdvm-host/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/MMDVMHost $(1)/usr/sbin/
-	$(INSTALL_BIN) ./files/usr/sbin/mmdvm-remote.sh $(1)/usr/sbin/
-	$(INSTALL_BIN) ./files/usr/sbin/mmdvm-update-dmrid.sh $(1)/usr/sbin/
-	$(INSTALL_BIN) ./files/usr/sbin/mmdvm-update-dmrid-bm.sh $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_CONF) ./files/etc/MMDVM.ini $(1)/etc/MMDVM.ini
-	$(INSTALL_DIR) $(1)/etc/mmdvm
-	$(INSTALL_CONF) ./files/etc/mmdvm/DMRIds.dat $(1)/etc/mmdvm/DMRIds.dat
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/etc/init.d/mmdvmhost.init $(1)/etc/init.d/mmdvmhost
+	$(CP) -a files/* $(1)/
 endef
 
 define Package/mmdvm-host/conffiles
-	/etc/MMDVM.ini
+/etc/MMDVM.ini
+/etc/config/mmdvm
+/etc/mmdvm/DMRIds.dat
 endef
 
 define Package/mmdvm-host/postinst
 #!/bin/sh
 if [ -e /etc/openwrt_release ]; then
-	/etc/init.d/mmdvmhost disable || :
+	uci set mmdvm.@mmdvmhost[0].enabled=1 && uci commit mmdvm || :
 fi
 
 crontab -l -u root  2>/dev/null |grep mmdvm-update-dmrid-bm >/dev/null
