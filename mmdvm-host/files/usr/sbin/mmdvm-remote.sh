@@ -91,7 +91,10 @@ foo=$(
 eval $foo
 
 # fix filepath if it doesn't end with a /
-[[ "$(echo ${LogFilePath: -1})" != "/" ]] && LogFilePath="$LogFilePath/"
+if [ $(printf $LogFilePath | tail -c 1) != "/" ]; then
+        LogFilePath="$LogFilePath/"
+fi
+echo "Opening ${LogFilePath}..."
 
 currentDate=foo # dummy current date variable to kick off the 1st tail!
 shuttingDown=0
