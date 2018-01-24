@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tinyaprs
 PKG_REV:=HEAD
-PKG_VERSION:=0.5.3
+PKG_VERSION:=0.5.4
 PKG_RELEASE:=
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -39,7 +39,8 @@ endef
 define Package/tinyaprs/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/tinyaprs $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/aprsutil $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/tinyaprs-util $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/tinyaprs-cfg $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/etc/init.d/tinyaprs.init $(1)/etc/init.d/tinyaprs
 endef
@@ -52,8 +53,8 @@ define Package/tinyaprs/postinst
 if [ -e /etc/openwrt_release ]; then
 	/etc/init.d/tinyaprs disable || :
 	if [ -e /etc/init.d/aprx ]; then
-		/etc/init.d/aprx stop || :
 		/etc/init.d/aprx disable || :
+		/etc/init.d/aprx stop || :
 	fi
 fi
 exit 0

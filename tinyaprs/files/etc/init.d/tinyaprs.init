@@ -36,10 +36,10 @@ do_update(){
     echo "remote config is not found!"
     return 1
   fi
-
-  MD5_REMOTE=`/usr/sbin/aprsutil md5 ${LOCAL_TEMP} |awk '{print $2}'`
+  MD5_HASH="/usr/sbin/tinyaprs-util md5"
+  MD5_REMOTE=`${MD5_HASH} ${LOCAL_TEMP} |awk '{print $2}'`
   MD5_LOCAL=empty
-  [ -f $LOCAL ] && MD5_LOCAL=`/usr/sbin/aprsutil md5 ${LOCAL} |awk '{print $2}'`
+  [ -f $LOCAL ] && MD5_LOCAL=`${MD5_HASH} ${LOCAL} |awk '{print $2}'`
   echo "L: ${MD5_LOCAL}"
   echo "R: ${MD5_REMOTE}"
   if [ "${MD5_LOCAL}" = "${MD5_REMOTE}" ];then
@@ -49,7 +49,7 @@ do_update(){
 
   echo "Updating ${LOCAL}..."
   cp -f ${LOCAL_TEMP} ${LOCAL}
-  [ $? -eq 0 ] || echo "Update failed!"
+  [ $? -eq 0 ] || echo "Update ${LOCAL} failed!"
 }
 
 update() {
