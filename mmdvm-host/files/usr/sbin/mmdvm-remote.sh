@@ -29,11 +29,22 @@ shutdownTG=999999
 rebootTG=888888
 allowShutdown=1
 allowReboot=1
+shutdownCmd="shutdown -h +1 >/dev/null 2>&1 && shuttingDown=1"
+rebootCmd="shutdown -r +1 >/dev/null 2>&1 && shuttingDown=1"
+cancelCmd="shutdown -c && shuttingDown=0"
+
+if [ -e /etc/openwrt_release ]; then
+	shutdownCmd="ubus call system reboot"
+	rebootCmd="ubus call system reboot"
+	cancelCmd=""
+fi
 
 ### DON'T EDIT BELOW HERE ###
 
 # exit if we're not root ...
-[[ $EUID -ne 0 ]] && exit 1
+if [ ! -e /etc/openwrt_release ]; then
+	[[ $EUID -ne 0 ]] && exit 1
+fi
 
 # exit if we can't find the ini file
 [[ -f $iniFile ]] || exit 2
@@ -106,15 +117,15 @@ do
 				if [ $TG -eq $shutdownTG ] && [ $shuttingDown -eq 0 ] && [ $allowShutdown -eq 1 ]
 				then
 					# shutdown in 1 minute ...
-					shutdown -h +1 >/dev/null 2>&1 && shuttingDown=1
+					$shutdownCmd
 				elif [ $TG -eq $rebootTG ] && [ $shuttingDown -eq 0 ] && [ $allowReboot -eq 1 ]
 				then
 					# reboot in 1 minute ...
-					shutdown -r +1 >/dev/null 2>&1 && shuttingDown=1
+					$rebootCmd
 				elif [ $shuttingDown -eq 1 ]
 				then
 					# cancel shutdown or reboot if sysop tx any TG in 1 min grace period ...
-					shutdown -c && shuttingDown=0
+					$cancelCmd
 				fi
 			fi	
 		done & 2>/dev/null # inner loop is run in background so we can periodically check if the date's changed
