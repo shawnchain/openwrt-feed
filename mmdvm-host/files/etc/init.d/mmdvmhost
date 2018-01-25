@@ -16,13 +16,13 @@ CONF_FILE=/etc/${CONF_NAME}
 TMP_CONF_FILE=/tmp/.MMDVM.ini.upd
 PID_FILE=/tmp/mmdvmhost.pid
 LOG_DIR=/var/log/mmdvm
-#MD5_TOOL='/usr/bin/openssl md5'
+DATA_DIR=/etc/mmdvm
 MD5_TOOL='/usr/bin/md5sum'
 SERVER_URL='https://hamclub.net/openwrt/config'
 
 do_update(){
-  CALL=$1
-  MAC=$2
+  local CALL=$1
+  local MAC=$2
 
   if [ -e /etc/openwrt_release ];then
     CALL=`uci get system.@system[0].hostname`
@@ -31,24 +31,23 @@ do_update(){
     CALL=`hostname -s`
     MAC=`ifconfig |grep HWaddr |awk '{print $5}' |head -n 1`
   fi
-  [ -z $CALL ] && echo "missing CALLSIGN" && exit
-  [ -z $MAC ] && echo "missing mac!"
+  [ -z $CALL ] && echo "Error: Need CALLSIGN" && exit
+  [ -z $MAC ] && echo "Warn: missing MAC!"
 
-  echo MyCall: ${CALL}
-  echo MyMAC: ${MAC}
+  echo CALL: ${CALL}, MAC: ${MAC}
 
-  REMOTE=${SERVER_URL}/${CALL}.${CONF_NAME}?mac=${MAC//:/}
+  local REMOTE=${SERVER_URL}/${CALL}.${CONF_NAME}?mac=${MAC//:/}
 
-  echo "Retrieving ${REMOTE}..."
+  echo "GET ${REMOTE}..."
   rm -f ${TMP_CONF_FILE}
   wget -q  ${REMOTE} -O ${TMP_CONF_FILE}
   if [ $? -ne 0 ];then
-    echo "failed to get remote config!"
+    echo "Get remote config FAILED!"
     return 1
   fi
 
-  MD5_REMOTE=`${MD5_TOOL} ${TMP_CONF_FILE} |awk '{print $1}'`
-  MD5_LOCAL=empty
+  local MD5_REMOTE=`${MD5_TOOL} ${TMP_CONF_FILE} |awk '{print $1}'`
+  local MD5_LOCAL=empty
   [ -f $CONF_FILE ] && MD5_LOCAL=`${MD5_TOOL} ${CONF_FILE} |awk '{print $1}'`
   echo "L: ${MD5_LOCAL}"
   echo "R: ${MD5_REMOTE}"
@@ -65,51 +64,56 @@ do_update(){
 
 check_update() {
   echo "Updating config from network..."
-  i=1
   if [ $1 -eq 0 ];then
     $1=3
   fi
 
-  while [ $i -le $1 ];do
+  local i=1
+  # while [ $i -le $1 ];do
+  #   i=$(($i+1))
+  #   echo "Trying $(($i-1))...";
+  #   do_update
+  #   [ $? -ne 0 ] || return 0
+  #   sleep 5
+  # done
+  while true; do
+    echo "Trying $(($i))...";
     i=$(($i+1))
-    echo "Trying $(($i-1))...";
     do_update
-    if [ $? -ne 0 ];then
-      sleep 5
-    else
-      return 0
-    fi
+    [ $? -ne 0 ] || return 0
+    [ $i -le $1 ] || return 1
+    sleep 5
   done
   return 1
 }
 
 check_user(){
   id "${USER}" >/dev/null 2>&1
-  if [ $? -eq 1 ]; then
+  if [ ! $? -eq 0 ]; then
+    echo "Creating user ${USER}"
     if [ -f /usr/sbin/useradd ]; then
-      echo "Creating user ${USER}"
       /usr/sbin/useradd -N -M -s /bin/false ${USER}
     else
-      echo "create user ${USER} failed, ${PKG_NAME} will not start." && exit 1;
+      echo "create user ${USER} failed, ${PKG_NAME} will not start."
+      exit 1;
     fi
   fi
   echo "Check user OK"
-  check_permission
 }
 
 check_permission(){
-  [ -f /dev/ttyACM0 ] && chown ${USER} /dev/ttyACM0 && echo "ttyACM0 found and fixed";
-  [ -f /dev/ttyACM1 ] && chown ${USER} /dev/ttyACM1 && echo "ttyACM1 found and fixed";
-  [ -f /dev/ttyUSB0 ] && chown ${USER} /dev/ttyUSB0 && echo "ttyUSB0 found and fixed";
-  [ -f /dev/ttyUSB1 ] && chown ${USER} /dev/ttyUSB1 && echo "ttyUSB1 found and fixed";
-  [ -f /dev/ttyS1 ] && chown ${USER} /dev/ttyS1 && echo "ttyS1 found and fixed";
-  [ -f /dev/ttyS2 ] && chown ${USER} /dev/ttyS2 && echo "ttyS2 found and fixed";
-  [ -d /etc/mmdvm ] && chown -R ${USER} /etc/mmdvm
-  if [ ! -d ${LOG_DIR} ]; then
-    mkdir -m 755 -p ${LOG_DIR}
-  fi
-  chown -R ${USER} ${LOG_DIR}
-  echo "Check permissions OK"
+  echo "Check permission"
+  local __devs="ttyACM0 ttyACM1 ttyUSB0 ttyUSB1 ttyS1 ttyS2"
+  for __dev in $(echo $__devs); do
+    [ -f /dev/$__dev ] && chown ${USER} /dev/$__dev && echo " $__dev found and fixed"
+  done
+
+  [ -d $DATA_DIR ] || mkdir -m 755 -p $DATA_DIR
+  [ -d $DATA_DIR ] && chown -R ${USER} $DATA_DIR && echo " $DATA_DIR found and fixed"
+
+  [ -d $LOG_DIR ] || mkdir -m 755 -p ${LOG_DIR}
+  [ -d $LOG_DIR ] && chown -R ${USER} ${LOG_DIR} && echo " $LOG_DIR found and fixed"
+  echo "Check permission OK"
 }
 
 check_running(){
@@ -126,13 +130,9 @@ check_running(){
 
 # returns 1 if enabled or 0 disabled
 check_enabled(){
-  local enabled
-  enabled=`uci get mmdvm.@mmdvmhost[0].enabled 2>/dev/null`
-  if [ $enabled -eq 1 ]; then
-    return 1
-  else
-    return 0
-  fi
+  local __en=$(uci -q get mmdvm.@mmdvmhost[0].enabled)
+  [ -z $__en ] || [ $__en -eq 0 ] || return 1
+  return 0
 }
 
 do_start() {
@@ -158,9 +158,8 @@ start() {
   if [ $? -eq 0 ]; then
     return 0
   fi
-  check_user
+  check_user && check_permission  
   check_update 1
-
   check_enabled
   if [ $? -eq 0 ]; then
     >&2 echo "${PKG_NAME} will not start because it's disabled"
