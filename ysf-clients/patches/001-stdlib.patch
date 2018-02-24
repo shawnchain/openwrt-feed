@@ -22,3 +22,12 @@
 +	make -C YSFParrot distclean
 +	make -C YSFReflector distclean
 +
+--- a/YSFParrot/UDPSocket.cpp   2018-02-25 01:33:35.476048067 +0800
++++ b/YSFParrot/UDPSocket.cpp   2018-02-25 01:34:54.100469029 +0800
+@@ -23,6 +23,7 @@
+ #if !defined(_WIN32) && !defined(_WIN64)
+ #include <cerrno>
+ #include <cstring>
++#include <stdlib.h>
+ #endif
+
