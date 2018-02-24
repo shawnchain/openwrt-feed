@@ -11,7 +11,7 @@ USER=mmdvm
 PKG_NAME=YSF2DMR
 BIN_FILE=/usr/sbin/YSF2DMR
 CONF_FILE=/etc/YSF2DMR.ini
-PID_FILE=/tmp/ysfgateway.pid
+PID_FILE=/tmp/ysf2dmr.pid
 LOG_DIR=/var/log/mmdvm
 
 check_user(){
