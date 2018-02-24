@@ -1,0 +1,12 @@
+diff --git a/DMRNetwork.cpp b/DMRNetwork.cpp
+index fe1a14c..b29d13b 100644
+--- a/DMRNetwork.cpp
++++ b/DMRNetwork.cpp
+@@ -26,6 +26,7 @@
+ #include <cstdio>
+ #include <cassert>
+ #include <cstring>
++#include <stdlib.h>
+ 
+ const unsigned int BUFFER_LENGTH = 500U;
+ 
