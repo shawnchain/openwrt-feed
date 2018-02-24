@@ -1,13 +1,15 @@
---- origin/CRC.cpp	2017-10-04 22:39:49.284442841 +0800
-+++ patched/CRC.cpp	2017-10-04 22:43:16.576442841 +0800
-@@ -60,26 +60,23 @@
- 	0xEF1F, 0xFF3E, 0xCF5D, 0xDF7C, 0xAF9B, 0xBFBA, 0x8FD9, 0x9FF8,
- 	0x6E17, 0x7E36, 0x4E55, 0x5E74, 0x2E93, 0x3EB2, 0x0ED1, 0x1EF0 };
+diff --git a/CRC.cpp b/CRC.cpp
+index e19f429..5fcb556 100644
+--- a/CRC.cpp
++++ b/CRC.cpp
+@@ -146,25 +146,23 @@ void CCRC::encodeFiveBit(const bool* in, unsigned int& tcrc)
+ 	tcrc = total;
+ }
  
 +#define HI_BYTE(s) (s >> 8 & 0xff)
 +#define LO_BYTE(s) (s & 0xff)
- 
- void CCRC::addCCITT16(unsigned char *in, unsigned int length)
++
+ void CCRC::addCCITT162(unsigned char *in, unsigned int length)
  {
  	assert(in != NULL);
  	assert(length > 2U);
@@ -32,8 +34,8 @@
 +	in[length - 2U] = HI_BYTE(crc16);
  }
  
- bool CCRC::checkCCITT16(const unsigned char *in, unsigned int length)
-@@ -87,19 +84,14 @@
+ bool CCRC::checkCCITT162(const unsigned char *in, unsigned int length)
+@@ -172,19 +170,14 @@ bool CCRC::checkCCITT162(const unsigned char *in, unsigned int length)
  	assert(in != NULL);
  	assert(length > 2U);
  
@@ -55,11 +57,52 @@
 +	return LO_BYTE(crc16) == in[length - 1U] && HI_BYTE(crc16) == in[length - 2U];
  }
  
- unsigned char CCRC::addCRC(const unsigned char* in, unsigned int length)
-@@ -112,4 +104,4 @@
- 		crc += in[i];
+ void CCRC::addCCITT161(unsigned char *in, unsigned int length)
+@@ -192,20 +185,15 @@ void CCRC::addCCITT161(unsigned char *in, unsigned int length)
+ 	assert(in != NULL);
+ 	assert(length > 2U);
  
- 	return crc;
--}
-\ No newline at end of file
-+}
+-	union {
+-		uint16_t crc16;
+-		uint8_t  crc8[2U];
+-	};
+-
+-	crc16 = 0xFFFFU;
++	uint16_t crc16 = 0xFFFFU;
+ 
+ 	for (unsigned int i = 0U; i < (length - 2U); i++)
+-		crc16 = uint16_t(crc8[1U]) ^ CCITT16_TABLE1[crc8[0U] ^ in[i]];
++		crc16 = uint16_t(HI_BYTE(crc16)) ^ CCITT16_TABLE1[LO_BYTE(crc16) ^ in[i]];
+ 
+ 	crc16 = ~crc16;
+ 
+-	in[length - 2U] = crc8[0U];
+-	in[length - 1U] = crc8[1U];
++	in[length - 2U] = LO_BYTE(crc16);
++	in[length - 1U] = HI_BYTE(crc16);
+ }
+ 
+ bool CCRC::checkCCITT161(const unsigned char *in, unsigned int length)
+@@ -213,19 +201,14 @@ bool CCRC::checkCCITT161(const unsigned char *in, unsigned int length)
+ 	assert(in != NULL);
+ 	assert(length > 2U);
+ 
+-	union {
+-		uint16_t crc16;
+-		uint8_t  crc8[2U];
+-	};
+-
+-	crc16 = 0xFFFFU;
++	uint16_t crc16 = 0xFFFFU;
+ 
+ 	for (unsigned int i = 0U; i < (length - 2U); i++)
+-		crc16 = uint16_t(crc8[1U]) ^ CCITT16_TABLE1[crc8[0U] ^ in[i]];
++		crc16 = uint16_t(HI_BYTE(crc16)) ^ CCITT16_TABLE1[LO_BYTE(crc16) ^ in[i]];
+ 
+ 	crc16 = ~crc16;
+ 
+-	return crc8[0U] == in[length - 2U] && crc8[1U] == in[length - 1U];
++	return LO_BYTE(crc16) == in[length - 2U] && HI_BYTE(crc16) == in[length - 1U];
+ }
+ 
+ unsigned char CCRC::crc8(const unsigned char *in, unsigned int length)
