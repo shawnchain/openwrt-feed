@@ -69,6 +69,8 @@ define Package/dmr-gateway/install
 	$(INSTALL_CONF) ./files/etc/DMRGateway.ini $(1)/etc/DMRGateway.ini	
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/etc/init.d/dmrgateway.init $(1)/etc/init.d/dmrgateway
+	$(INSTALL_DATA) ./files/etc/XLXHosts.txt $(1)/etc/mmdvm/
+	$(INSTALL_DATA) ./files/etc/XLXHosts_private.txt $(1)/etc/mmdvm/
 	$(INSTALL_DIR) $(1)/etc/mmdvm/Audio
 	$(INSTALL_DATA) ./files/etc/Audio/* $(1)/etc/mmdvm/Audio/
 endef
