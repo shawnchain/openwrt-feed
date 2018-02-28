@@ -69,6 +69,8 @@ define Package/dmr-gateway/install
 	$(INSTALL_CONF) ./files/etc/DMRGateway.ini $(1)/etc/DMRGateway.ini	
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/etc/init.d/dmrgateway.init $(1)/etc/init.d/dmrgateway
+	$(INSTALL_DIR) $(1)/etc/mmdvm/Audio
+	$(INSTALL_DATA) ./files/etc/Audio/* $(1)/etc/mmdvm/Audio/
 endef
 
 define Package/dmr-gateway/conffiles
@@ -78,8 +80,8 @@ endef
 define Package/dmr-gateway/postinst
 #!/bin/sh
 if [ -e /etc/openwrt_release ]; then
-	/etc/init.d/dmrgateway stop
-	/etc/init.d/dmrgateway disable
+	/etc/init.d/dmrgateway stop  || :
+	/etc/init.d/dmrgateway disable  || :
 fi
 exit 0
 endef
