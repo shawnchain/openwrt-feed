@@ -1,0 +1,11 @@
+--- a/DMRGateway.cpp
++++ b/DMRGateway.cpp
+@@ -35,6 +35,7 @@
+
+ #include <cstdio>
+ #include <vector>
++#include <cstdlib>
+
+ #if !defined(_WIN32) && !defined(_WIN64)
+ #include <sys/types.h>
+ 
