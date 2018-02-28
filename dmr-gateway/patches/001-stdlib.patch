@@ -9,3 +9,13 @@
  #if !defined(_WIN32) && !defined(_WIN64)
  #include <sys/types.h>
  
+--- a/DMRNetwork.cpp
++++ b/DMRNetwork.cpp
+@@ -25,6 +25,7 @@
+
+ #include <cstdio>
+ #include <cassert>
++#include <cstdlib>
+
+ const unsigned int BUFFER_LENGTH = 500U;
+
