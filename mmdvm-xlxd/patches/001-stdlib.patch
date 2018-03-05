@@ -1,33 +1,32 @@
-diff -uNr xlxd.git/Makefile xlxd-bg5hhp.git/Makefile
---- xlxd.git/Makefile	1970-01-01 08:00:00.000000000 +0800
-+++ xlxd-bg5hhp.git/Makefile	2018-03-05 11:34:31.000000000 +0800
-@@ -0,0 +1,8 @@
+diff -uNr a/Makefile b/Makefile
+--- a/Makefile	1970-01-01 08:00:00.000000000 +0800
++++ b/Makefile	2018-03-05 12:28:50.794092527 +0800
+@@ -0,0 +1,7 @@
 +xlxd:
 +	make -C src
-+
-+all:	xlxd
++all:    xlxd
 +
 +clean:
 +	make -C src clean
 +
-diff -uNr xlxd.git/src/makefile xlxd-bg5hhp.git/src/makefile
---- xlxd.git/src/makefile	2018-03-05 12:23:13.000000000 +0800
-+++ xlxd-bg5hhp.git/src/makefile	2018-03-05 12:23:31.000000000 +0800
-@@ -1,30 +1,21 @@
+diff -uNr a/src/makefile b/src/makefile
+--- a/src/makefile	2018-03-05 12:27:35.451927965 +0800
++++ b/src/makefile	2018-03-05 12:32:48.884368983 +0800
+@@ -1,30 +1,22 @@
 -CC=g++
 -CFLAGS=-c -std=c++11 -pthread
 -LDFLAGS=-std=c++11 -pthread
 -SOURCES=$(wildcard *.cpp)
 -OBJECTS=$(SOURCES:.cpp=.o)
-+CC	= gcc
-+CXX	= g++
-+CFLAGS	= -g -O3 -Wall -c -std=c++11 -pthread
-+LDFLAGS	= -g -O3 -Wall -std=c++11
-+LIBS	= -lpthread
-+LDFLAGS	= -g
++CC      = gcc
++CXX     = g++
++CFLAGS  = -g -O3 -Wall -c -std=c++11 -pthread
++LDFLAGS = -g -O3 -Wall -std=c++11
++LIBS    = -lpthread
++LDFLAGS = -g
 +
 +SOURCES =$(wildcard *.cpp)
-+OBJECTS	=$(SOURCES:.cpp=.o)
++OBJECTS =$(SOURCES:.cpp=.o)
  EXECUTABLE=xlxd
  
  all: $(SOURCES) $(EXECUTABLE)
@@ -42,7 +41,7 @@ diff -uNr xlxd.git/src/makefile xlxd-bg5hhp.git/src/makefile
  
  clean:
  	$(RM) $(EXECUTABLE) *.o
--
+ 
 -install:
 -	mkdir -p /xlxd
 -	cp -f $(EXECUTABLE) /xlxd/
