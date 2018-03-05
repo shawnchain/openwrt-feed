@@ -64,11 +64,13 @@ MAKE_FLAGS +=\
 
 define Package/mmdvm-xlxd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/xlxd $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/xlxd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) ./files/etc/XLXD.ini $(1)/etc/XLXD.ini	
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/etc/init.d/xlxd.init $(1)/etc/init.d/xlxd
+	$(INSTALL_DIR) $(1)/etc/mmdvm/xlxd
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/config/* $(1)/etc/mmdvm/xlxd
 endef
 
 define Package/mmdvm-xlxd/conffiles
