@@ -78,6 +78,12 @@ define Package/mmdvm-xlxd/conffiles
 endef
 
 define Package/mmdvm-xlxd/postinst
+#!/bin/sh
+if [ -e /etc/openwrt_release ]; then
+	/etc/init.d/xlxd stop || :
+	/etc/init.d/xlxd disable || :
+fi
+exit 0
 endef
 
 $(eval $(call BuildPackage,mmdvm-xlxd,+uclibcxx,+libpthread,+libstdc++))
