@@ -70,7 +70,9 @@ define Package/mmdvm-xlxd/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/etc/init.d/xlxd.init $(1)/etc/init.d/xlxd
 	$(INSTALL_DIR) $(1)/etc/mmdvm/xlxd
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/config/* $(1)/etc/mmdvm/xlxd
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/config/* $(1)/etc/mmdvm/xlxd/
+	$(INSTALL_DATA) ./files/etc/mmdvm/xlxd/dmrid_cn.dat $(1)/etc/mmdvm/xlxd/dmrid.dat
+#	$(INSTALL_DATA) ./files/etc/mmdvm/xlxd/* $(1)/etc/mmdvm/xlxd/
 endef
 
 define Package/mmdvm-xlxd/conffiles
