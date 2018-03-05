@@ -31,16 +31,8 @@ define Package/mmdvm-xlxd-dashboard/description
 	Build for OpenWrt, by BG5HHP
 endef
 
-#define Build/Compile
-#$(MAKE) -C $(PKG_BUILD_DIR) \
-#        LIBS=" -lgcc -lc -luClibc++" \
-#        LDFLAGS="$(EXTRA_LDFLAGS)" \
-#        CXXFLAGS="$(TARGET_CFLAGS) $(EXTRA_CPPFLAGS) -nostdinc++" \
-#        $(TARGET_CONFIGURE_OPTS) \
-#        CROSS="$(TARGET_CROSS)" \
-#        ARCH="$(ARCH)" \
-#        ;
-#endef
+define Build/Compile
+endef
 
 define Package/mmdvm-xlxd-dashboard/install
 	$(INSTALL_DIR) $(1)/www/xlxd
