@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mmdvm-xlxd
-PKG_REV:=HEAD
-#PKG_REV:=6a23450
-PKG_VERSION:=BG5HHP-20180224
+#PKG_REV:=HEAD
+PKG_REV:=4b4658f
+PKG_VERSION:=BG5HHP-20180305
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -47,7 +47,7 @@ endef
 #        ;
 #endef
 
-TARGET_CFLAGS += -std=c++0x
+TARGET_CFLAGS += -std=c++11
 
 TARGET_CPPFLAGS += \
 
