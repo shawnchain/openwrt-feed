@@ -1,5 +1,5 @@
 diff --git a/src/main.h b/src/main.h
-index fa7acab..d677507 100644
+index fa7acab..0cc7f20 100644
 --- a/src/main.h
 +++ b/src/main.h
 @@ -127,8 +127,8 @@
@@ -13,18 +13,16 @@ index fa7acab..d677507 100644
  #define DMRIDDB_REFRESH_RATE            180                                 // in minutes
  
  
-@@ -142,10 +142,10 @@
+@@ -142,9 +142,9 @@
  // system paths -------------------------------------------------
  
  #define XML_PATH                        "/var/log/xlxd.xml"
 -#define WHITELIST_PATH                  "/xlxd/xlxd.whitelist"
 -#define BLACKLIST_PATH                  "/xlxd/xlxd.blacklist"
 -#define INTERLINKLIST_PATH              "/xlxd/xlxd.interlink"
--#define DEBUGDUMP_PATH                  "/var/log/xlxd.debug"
 +#define WHITELIST_PATH                  "/etc/mmdvm/xlxd/xlxd.whitelist"
 +#define BLACKLIST_PATH                  "/etc/mmdvm/xlxd/xlxd.blacklist"
 +#define INTERLINKLIST_PATH              "/etc/mmdvm/xlxd/xlxd.interlink"
-+#define DEBUGDUMP_PATH                  "/etc/mmdvm/var/log/xlxd.debug"
+ #define DEBUGDUMP_PATH                  "/var/log/xlxd.debug"
  
  // system constants ---------------------------------------------
- 
