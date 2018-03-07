@@ -36,7 +36,7 @@ endef
 
 define Package/mmdvm-xlxd-dashboard/install
 	$(INSTALL_DIR) $(1)/www/xlxd
-	$(INSTALL_DATA) ./files/www/* $(1)/www/xlxd/
+	$(CP) -r ./files/www/* $(1)/www/xlxd/
 endef
 
 define Package/mmdvm-xlxd-dashboard/conffiles
