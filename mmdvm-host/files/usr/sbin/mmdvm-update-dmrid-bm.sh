@@ -52,6 +52,7 @@
 #
 # Full path to DMR ID file
 DMRIDFILE=/etc/mmdvm/DMRIds.dat
+DMRIDFILE_CN=/etc/mmdvm/DMRIds_cn.dat
 #
 # How many DMR ID files do you want backed up (0 = do not keep backups)
 DMRFILEBACKUP=1
@@ -94,5 +95,8 @@ fi
 # Generate new file
 #curl 'http://registry.dstar.su/dmr/DMRIds.php' 2>/dev/null | sed -e 's/[[:space:]]\+/ /g' > ${DMRIDFILE}
 wget 'http://registry.dstar.su/dmr/DMRIds.php' -O - 2>/dev/null | sed -e 's/[[:space:]]\+/ /g' > ${DMRIDFILE}
+
+grep "^460" ${DMRIDFILE} > ${DMRIDFILE_CN}
+
 # Restart MMDVMHost
 eval ${RESTARTCOMMAND}
