@@ -77,8 +77,15 @@ if [ -e /etc/openwrt_release ]; then
 	uci set mmdvm.@mmdvmhost[0].enabled=1 && uci commit mmdvm || :
 	crontab -l -u root  2>/dev/null |grep mmdvm-update-dmrid-bm >/dev/null
 	if [ $$? -ne 0 ]; then
+		echo "Updating crontab ... "
 		echo "5 0 * * * /usr/sbin/mmdvm-update-dmrid-bm.sh >/tmp/mmdvm-update-dmrid-bm.log 2>&1 &" >>/etc/crontabs/root
 		/etc/init.d/cron restart || :
+	fi
+	cat /etc/rc.local |grep "mmdvm-network-helper.sh" >/dev/null
+	if [ $$? -ne 0 ]; then
+		#insert the helper command before exit 0
+		echo "Updating /etc/rc.local ... "
+		sed -i '/exit 0/ i /usr/sbin/mmdvm-network-helper.sh & 2>/dev/null' /etc/rc.local
 	fi
 fi
 exit 0
