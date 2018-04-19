@@ -29,12 +29,8 @@ function index()
 end
 
 function mmdvm_log_action()
-        luci.http.prepare_content("text/plain")
-        luci.http.write("-= MMDVMHost Log =-")
-        luci.http.write("\n...")
-        for aline in luci.util.execi("_log=/var/log/MMDVM-$(date -u +%Y-%m-%d).log;[ -f $_log ] && tail -n 50 $_log || echo \"No log file $_log\"") do
-                luci.http.write("\n" .. aline)
-        end
+        local logs = luci.util.exec("tail -n 100 /var/log/MMDVM-$(date -u +%Y-%m-%d).log")
+        luci.template.render("mmdvm/mmdvmhostlog",{logs=logs})
 end
 
 function ysfgw_log_action()
