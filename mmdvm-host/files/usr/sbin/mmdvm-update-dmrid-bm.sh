@@ -1,27 +1,6 @@
 #! /bin/sh
-
-###############################################################################
 #
-# DMRIDUpdate.sh
-#
-# Copyright (C) 2016 by Tony Corbett G0WFV
-# edit by R2AJV
-# edit by CT2JAY
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-# 
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-#
+# By BG5HHP, based on DMRIDUpdate.sh by Tony Corbett G0WFV,R2AJV,CT2JAY
 ###############################################################################
 #
 # On a Linux based system, such as a Raspberry Pi, this script will perform all 
@@ -52,7 +31,7 @@
 #
 # Full path to DMR ID file
 DMRIDFILE=/etc/mmdvm/DMRIds.dat
-DMRIDFILE_CN=/etc/mmdvm/DMRIds_cn.dat
+DMRIDFILE_CN=/etc/mmdvm/DMRIds_CN.dat
 #
 # How many DMR ID files do you want backed up (0 = do not keep backups)
 DMRFILEBACKUP=1
@@ -74,29 +53,37 @@ then
 	exit 1
 fi
 
-# Create backup of old file
-if [ ${DMRFILEBACKUP} -ne 0 ]
-then
-	cp ${DMRIDFILE} ${DMRIDFILE}.$(date +%d%m%y)
+# Download the file as temporary file
+TEMP_FILE="/tmp/.dmrid_upd.tmp"
+rm -f $TEMP_FILE
+echo "Downloading DMRIds from BM ... "
+wget 'http://registry.dstar.su/dmr/DMRIds.php' -O - 2>/dev/null | sed -e 's/[[:space:]]\+/ /g' > ${TEMP_FILE}
+#make sure we're success
+[ $? = 0 ] || (echo "download DMRIds failed." && exit 1)
+
+# Safe update the DMRIds.dat
+TODAY=$(date +%d%m%y)
+mv ${DMRIDFILE} ${DMRIDFILE}.${TODAY}
+mv $TEMP_FILE $DMRIDFILE
+if [ $? -ne 0 ];then
+	# restore if something wrong
+	echo "rename DMRIds failed, restoring ..."
+	mv ${DMRIDFILE}.${TODAY} ${DMRIDFILE}
+	exit 1
 fi
 
 # Prune backups
 BACKUPCOUNT=$(ls ${DMRIDFILE}.* | wc -l)
 BACKUPSTODELETE=$(expr ${BACKUPCOUNT} - ${DMRFILEBACKUP})
-
-if [ ${BACKUPCOUNT} -gt ${DMRFILEBACKUP} ]
-then
-	for f in $(ls -tr ${DMRIDFILE}.* | head -${BACKUPSTODELETE})
-	do
+if [ ${BACKUPCOUNT} -gt ${DMRFILEBACKUP} ]; then
+	for f in $(ls -tr ${DMRIDFILE}.* | head -${BACKUPSTODELETE}); do
 		rm $f
 	done
 fi
 
-# Generate new file
-#curl 'http://registry.dstar.su/dmr/DMRIds.php' 2>/dev/null | sed -e 's/[[:space:]]\+/ /g' > ${DMRIDFILE}
-wget 'http://registry.dstar.su/dmr/DMRIds.php' -O - 2>/dev/null | sed -e 's/[[:space:]]\+/ /g' > ${DMRIDFILE}
-
+# Update the CN IDs as well ...
 grep "^460" ${DMRIDFILE} > ${DMRIDFILE_CN}
 
+echo "Complete! now Restarting mmdvm ... "
 # Restart MMDVMHost
 eval ${RESTARTCOMMAND}
