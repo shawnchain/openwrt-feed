@@ -3,9 +3,9 @@
 -%>
 
 <%+header%>
-<h2 name="content"><%:MMDVMHost Log%></h2>
+<h2 name="content"><%:MMDVMHost CFG%></h2>
 <div id="content_syslog">
-<textarea readonly="readonly" wrap="off" rows="<%=logs:cmatch("\n")/2%>" id="syslog"><%=logs:pcdata()%></textarea>
+<textarea wrap="off" rows="<%=cfg:cmatch("\n")/2%>" id="syslog"><%=cfg:pcdata()%></textarea>
 </div>
 
 <script type="text/javascript">//<![CDATA[
@@ -21,13 +21,15 @@
             document.getElementById('reboot-message').parentNode.style.display = '';
             (new XHR()).post('<%=controller%>/admin/mmdvm/restart/call', { token: '<%=token%>' }, check);
     }
-    function config() {
-        window.location = '<%=controller%>/admin/mmdvm/config';
+    function save() {
+        //TODO - save configure
+        alert("not implemented yet!");
+        window.location = '<%=controller%>/admin/mmdvm/log';
     }
 //]]></script>
 <br/>
 <input class="cbi-button cbi-button-reload" type="button" value="<%:Restart%>" onclick="restart(this)" />
-<input class="cbi-button cbi-button-edit" type="button" value="<%:Configure%>" onclick="config(this)" />
+<input class="cbi-button cbi-button-apply" type="button" value="<%:Save%>" onclick="save(this)" />
 <p class="alert-message" style="display:none">
     <img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" />
     <span id="reboot-message"><%:Restarting MMDVMHost...%></span>

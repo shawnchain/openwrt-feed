@@ -7,9 +7,14 @@ function index()
 
         local _mod
         entry({"admin", "mmdvm"}, firstchild(), "MMDVM", 60).dependent=false
-        _mod = entry({"admin", "mmdvm", "log"}, call("mmdvm_log_action"), _("MMDVM Log") , 1)
+        _mod = entry({"admin", "mmdvm", "log"}, call("mmdvm_log_action"), _("MMDVM LOG") , 1)
         _mod.sysauth = "root"
         _mod.sysauth_authenticator = "htmlauth"
+
+        _mod = entry({"admin", "mmdvm", "config"}, call("mmdvm_cfg_action"), _("MMDVM CFG") , 1)
+        _mod.sysauth = "root"
+        _mod.sysauth_authenticator = "htmlauth"
+        entry({"admin", "mmdvm", "restart", "call"}, post("mmdvm_restart_action"))
 
         _mod = entry({"admin", "mmdvm", "ysfgwlog"}, call("ysfgw_log_action"), _("YSF Gateway Log"), 10)
         _mod.sysauth = "root"
@@ -31,6 +36,15 @@ end
 function mmdvm_log_action()
         local logs = luci.util.exec("tail -n 100 /var/log/MMDVM-$(date -u +%Y-%m-%d).log")
         luci.template.render("mmdvm/mmdvmhostlog",{logs=logs})
+end
+
+function mmdvm_restart_action()
+        luci.util.exec("/etc/init.d/mmdvmhost restart")
+end
+
+function mmdvm_cfg_action()
+        local cfg = luci.util.exec("cat /etc/MMDVM.ini")
+        luci.template.render("mmdvm/mmdvmhostcfg",{cfg=cfg})
 end
 
 function ysfgw_log_action()
