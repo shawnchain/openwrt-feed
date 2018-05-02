@@ -65,10 +65,7 @@ MAKE_FLAGS +=\
 define Package/ysf2dmr/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/YSF2DMR $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_CONF) ./files/etc/YSF2DMR.ini $(1)/etc/YSF2DMR.ini	
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/etc/init.d/ysf2dmr.init $(1)/etc/init.d/ysf2dmr
+	$(CP) -a files/* $(1)/
 endef
 
 define Package/ysf2dmr/conffiles
