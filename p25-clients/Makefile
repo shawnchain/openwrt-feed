@@ -9,8 +9,8 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=p25-clients
 #PKG_REV:=HEAD
-PKG_REV:=2a728e3
-PKG_VERSION:=BG5HHP-20180114
+PKG_REV:=6e6ce17
+PKG_VERSION:=BG5HHP-20180502
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -27,7 +27,7 @@ define Package/p25-clients
   CATEGORY:=Network
   TITLE:=P25Clients
   URL:=https://github.com/g4klx/P25Clients/
-  DEPENDS:=+libpthread +libstdcpp
+  DEPENDS:=+libpthread +libstdcpp +mmdvm-common
 endef
 
 define Package/p25-clients/description
@@ -53,29 +53,14 @@ MAKE_FLAGS +=\
 define Package/p25-clients/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/P25Gateway/P25Gateway $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_CONF) ./files/etc/P25Gateway.ini $(1)/etc/P25Gateway.ini	
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/etc/init.d/p25gateway.init $(1)/etc/init.d/p25gateway
 
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/P25Parrot/P25Parrot $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/etc/init.d/p25parrot.init $(1)/etc/init.d/p25parrot
 
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/P25Reflector/P25Reflector $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_CONF) ./files/etc/P25Reflector.ini $(1)/etc/P25Reflector.ini	
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/etc/init.d/p25reflector.init $(1)/etc/init.d/p25reflector
 
-	$(INSTALL_DIR) $(1)/etc/mmdvm
-	$(INSTALL_CONF) ./files/etc/mmdvm/P25Hosts.txt $(1)/etc/mmdvm/
-	$(INSTALL_CONF) ./files/etc/mmdvm/P25Hosts_private.txt $(1)/etc/mmdvm/
-
-	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) ./files/usr/sbin/P25Hostsupdate.sh $(1)/usr/sbin/
+	$(CP) -a files/* $(1)/
 endef
 
 define Package/p25-clients/conffiles

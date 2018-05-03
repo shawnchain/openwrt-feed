@@ -1,0 +1,63 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2008-2011 OpenWrt.org
+# Copyright (C) 2018 BG5HHP@hamclub.net
+. /usr/sbin/mmdvm.common
+
+START=99
+
+SERVICE_USE_PID=0
+
+PKG_NAME=P25Parrot
+BIN_FILE=/usr/sbin/P25Parrot
+#CONF_FILE=/etc/YSFGateway.ini
+PORT=42011
+PID_FILE=/tmp/p25parrot.pid
+
+do_start() {
+  ${BIN_FILE} -n ${PORT} >/dev/null 2>&1 &
+  echo $! >${PID_FILE}	
+  >&2 echo "${PKG_NAME} started"
+}
+
+start() {
+  check_enabled
+  if [ $? -eq 0 ]; then
+    >&2 echo "${PKG_NAME} is disabled"
+    return 0
+  fi  
+	check_running
+  if [ $? -eq 0 ]; then
+    return 0
+  fi
+  #check_update 3
+  check_user
+  do_start
+}
+
+stop() {
+	if [ -e ${PID_FILE} ]; then
+		PID=`cat ${PID_FILE}`
+		kill $PID > /dev/null 2>&1
+		rm -f ${PID_FILE}
+		echo "${PKG_NAME} stopped"
+	else
+		echo "${PKG_NAME} is not running"
+	fi
+    return 0
+}
+
+restart() {
+	stop
+	start
+}
+
+#reload(){
+#  update
+#  if [ $? -ne 0 ];then
+#	echo "Update config failed.";
+#  else
+#	stop
+#	do_start
+#	break
+#  fi
+#}
