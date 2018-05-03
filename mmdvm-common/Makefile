@@ -21,7 +21,7 @@ define Package/mmdvm-common
   TITLE:=MMDVM Common
   MAINTAINER:=BG5HHP <bg5hhp@hamclub.net>
   URL:=https://mmdvm.cc/
-  DEPENDS:=+luci
+#  DEPENDS:=
 endef
 
 define Package/mmdvm-common/description
