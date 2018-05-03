@@ -27,7 +27,7 @@ define Package/mmdvm-host
   CATEGORY:=Network
   TITLE:=MMDVM Host
   URL:=https://github.com/g4klx/MMDVMHost/
-  DEPENDS:=+libpthread +libstdcpp
+  DEPENDS:=+libpthread +libstdcpp +mmdvm-common
 endef
 
 define Package/mmdvm-host/description
@@ -75,12 +75,6 @@ define Package/mmdvm-host/postinst
 #!/bin/sh
 if [ -e /etc/openwrt_release ]; then
 	uci set mmdvm.@mmdvmhost[0].enabled=1 && uci commit mmdvm || :
-	crontab -l -u root  2>/dev/null |grep mmdvm-update-dmrid-bm >/dev/null
-	if [ $$? -ne 0 ]; then
-		echo "Updating crontab ... "
-		echo "5 0 * * * /usr/sbin/mmdvm-update-dmrid-bm.sh >/tmp/mmdvm-update-dmrid-bm.log 2>&1 &" >>/etc/crontabs/root
-		/etc/init.d/cron restart || :
-	fi
 	cat /etc/rc.local |grep "mmdvm-network-helper.sh" >/dev/null
 	if [ $$? -ne 0 ]; then
 		#insert the helper command before exit 0
@@ -91,4 +85,4 @@ fi
 exit 0
 endef
 
-$(eval $(call BuildPackage,mmdvm-host,+libpthread,+libstdc++))
+$(eval $(call BuildPackage,mmdvm-host,+libpthread,+libstdc++,+mmdvm-common))

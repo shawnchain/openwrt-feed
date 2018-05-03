@@ -8,16 +8,12 @@ START=99
 
 SERVICE_USE_PID=0
 
-USER=mmdvm
 PKG_NAME=MMDVMHost
 BIN_FILE=/usr/sbin/MMDVMHost
 CONF_NAME=MMDVM.ini
 CONF_FILE=/etc/${CONF_NAME}
 TMP_CONF_FILE=/tmp/.MMDVM.ini.upd
 PID_FILE=/tmp/mmdvmhost.pid
-LOG_DIR=/var/log/mmdvm
-DATA_DIR=/etc/mmdvm
-MD5_TOOL='/usr/bin/md5sum'
 SERVER_URL='https://hamclub.net/openwrt/config'
 
 do_update(){
@@ -85,55 +81,6 @@ check_update() {
     sleep 5
   done
   return 1
-}
-
-check_user(){
-  id "${USER}" >/dev/null 2>&1
-  if [ ! $? -eq 0 ]; then
-    echo "Creating user ${USER}"
-    if [ -f /usr/sbin/useradd ]; then
-      /usr/sbin/useradd -N -M -s /bin/false ${USER}
-    else
-      echo "create user ${USER} failed, ${PKG_NAME} will not start."
-      exit 1;
-    fi
-  fi
-  echo "Check user OK"
-}
-
-check_permission(){
-  echo "Check permission"
-  local __devs="ttyACM0 ttyACM1 ttyUSB0 ttyUSB1 ttyS1 ttyS2"
-  for __dev in $(echo $__devs); do
-    [ -f /dev/$__dev ] && chown ${USER} /dev/$__dev && echo " $__dev found and fixed"
-  done
-
-  [ -d $DATA_DIR ] || mkdir -m 755 -p $DATA_DIR
-  [ -d $DATA_DIR ] && chown -R ${USER} $DATA_DIR && echo " $DATA_DIR found and fixed"
-
-  [ -d $LOG_DIR ] || mkdir -m 755 -p ${LOG_DIR}
-  [ -d $LOG_DIR ] && chown -R ${USER} ${LOG_DIR} && echo " $LOG_DIR found and fixed"
-  echo "Check permission OK"
-}
-
-check_running(){
-  # check if service is running
-  if [ -e ${PID_FILE} ]; then
-    local PID=`pidof ${PKG_NAME}`
-    if [ $? -eq 0 ]; then
-            echo "${PKG_NAME} is running"
-            return 0
-    fi
-  fi
-  return 1
-}
-
-# returns 1 if enabled or 0 disabled
-check_enabled(){
-  local _pkgname=$(echo $PKG_NAME | awk '{print toupper($0)}')
-  local __en=$(uci -q get mmdvm.@${_pkgname}[0].enabled)
-  [ -z $__en ] || [ $__en -eq 0 ] || return 1
-  return 0
 }
 
 do_start() {
