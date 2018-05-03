@@ -1,4 +1,3 @@
-Only in 2: Makefile
 diff -ur 1/src/makefile 2/src/makefile
 --- 1/src/makefile	2018-03-05 17:30:54.000000000 +0800
 +++ 2/src/makefile	2018-05-03 17:34:59.000000000 +0800
