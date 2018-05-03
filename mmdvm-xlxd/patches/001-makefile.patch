@@ -1,0 +1,11 @@
+diff -uNr a/Makefile b/Makefile
+--- a/Makefile	1970-01-01 08:00:00.000000000 +0800
++++ b/Makefile	2018-03-05 12:28:50.794092527 +0800
+@@ -0,0 +1,7 @@
++xlxd:
++	make -C src
++all:    xlxd
++
++clean:
++	make -C src clean
++
