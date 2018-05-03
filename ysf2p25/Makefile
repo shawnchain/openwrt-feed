@@ -28,7 +28,7 @@ define Package/ysf2p25
   CATEGORY:=Network
   TITLE:=YSF2P25
   URL:=https://github.com/juribeparada/YSF2P25/
-  DEPENDS:=+uclibcxx +libpthread +libstdcpp
+  DEPENDS:=+uclibcxx +libpthread +libstdcpp +mmdvm-common
 endef
 
 define Package/ysf2p25/description

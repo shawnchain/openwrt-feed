@@ -28,7 +28,7 @@ define Package/ysf2dmr
   CATEGORY:=Network
   TITLE:=YSF2DMR
   URL:=https://github.com/juribeparada/YSF2DMR/
-  DEPENDS:=+uclibcxx +libpthread +libstdcpp
+  DEPENDS:=+uclibcxx +libpthread +libstdcpp +mmdvm-common
 endef
 
 define Package/ysf2dmr/description
