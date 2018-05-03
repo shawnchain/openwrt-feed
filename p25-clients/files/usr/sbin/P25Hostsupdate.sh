@@ -49,10 +49,10 @@
 #                              CONFIGURATION
 #
 # Full path to YSFHosts
-YSFHOSTS=/etc/mmdvm/P25Hosts.txt
+P25HOSTS=/etc/mmdvm/P25Hosts.txt
 
-# How many YSFHosts files do you want backed up (0 = do not keep backups) 
-YSFHOSTSFILEBACKUP=0
+# How many P25HOSTS files do you want backed up (0 = do not keep backups) 
+P25HOSTSFILEBACKUP=0
 
 ###############################################################################
 #
@@ -72,18 +72,18 @@ then
 fi
 
 # Create backup of old file
-if [ ${YSFHOSTSFILEBACKUP} -ne 0 ]
+if [ ${P25HOSTSFILEBACKUP} -ne 0 ]
 then
-	cp ${YSFHOSTS} ${YSFHOSTS}.$(date +%d%m%y)
+	cp ${P25HOSTS} ${P25HOSTS}.$(date +%d%m%y)
 fi
 
 # Prune backups
-BACKUPCOUNT=$(ls ${YSFHOSTS}.* | wc -l)
-BACKUPSTODELETE=$(expr ${BACKUPCOUNT} - ${YSFHOSTSFILEBACKUP})
+BACKUPCOUNT=$(ls ${P25HOSTS}.* | wc -l)
+BACKUPSTODELETE=$(expr ${BACKUPCOUNT} - ${P25HOSTSFILEBACKUP})
 
-if [ ${BACKUPCOUNT} -gt ${YSFHOSTSFILEBACKUP} ]
+if [ ${BACKUPCOUNT} -gt ${P25HOSTSFILEBACKUP} ]
 then
-	for f in $(ls -tr ${YSFHOSTS}.* | head -${BACKUPSTODELETE})
+	for f in $(ls -tr ${P25HOSTS}.* | head -${BACKUPSTODELETE})
 	do
 		rm -f $f
 	done

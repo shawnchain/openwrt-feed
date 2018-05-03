@@ -71,14 +71,11 @@ endef
 define Package/p25-clients/postinst
 #!/bin/sh
 if [ -e /etc/openwrt_release ]; then
-	#/etc/init.d/p25gateway disable || :
-	#/etc/init.d/p25parrot disable || :
-	#/etc/init.d/p25reflector disable || :
-	#crontab -l -u root  2>/dev/null |grep P25Hostsupdate >/dev/null
-	#if [ $$? -ne 0 ]; then
-	#	echo "5 0 * * * /usr/sbin/P25Hostsupdate.sh >/tmp/P25Hostsupdate.log 2>&1 &" >>/etc/crontabs/root
-	#	/etc/init.d/cron restart || :
-	#fi
+	crontab -l -u root  2>/dev/null |grep P25Hostsupdate >/dev/null
+	if [ $$? -ne 0 ]; then
+		echo "15 2 * * * /usr/sbin/P25Hostsupdate.sh >/tmp/P25Hostsupdate.log 2>&1 &" >>/etc/crontabs/root
+		/etc/init.d/cron restart || :
+	fi
 fi
 exit 0
 endef

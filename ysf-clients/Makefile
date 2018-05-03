@@ -85,7 +85,7 @@ define Package/ysf-clients/postinst
 if [ -e /etc/openwrt_release ]; then
 	crontab -l -u root  2>/dev/null |grep YSFHostsupdate >/dev/null
 	if [ $$? -ne 0 ]; then
-		echo "5 0 * * * /usr/sbin/YSFHostsupdate.sh >/tmp/YSFHostsupdate.log 2>&1 &" >>/etc/crontabs/root
+		echo "10 2 * * * /usr/sbin/YSFHostsupdate.sh >/tmp/YSFHostsupdate.log 2>&1 &" >>/etc/crontabs/root
 		/etc/init.d/cron restart || :
 	fi
 fi

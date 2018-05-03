@@ -1,8 +1,8 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2008-2011 OpenWrt.org
-# Copyright (C) 2017 BG5HHP
+# Copyright (C) 2017,2018 BG5HHP
 . /usr/sbin/mmdvm.common
-# This script needs shadow-useradd and openssl-util installed currently
+# This script needs shadow-useradd installed
 
 START=99
 
