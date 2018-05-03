@@ -10,6 +10,7 @@ diff -uNr a/Makefile b/Makefile
 +	make -C src clean
 +
 diff --git a/src/makefile b/src/makefile
+index de1e0db..3f95390 100644
 --- a/src/makefile
 +++ b/src/makefile
 @@ -1,30 +1,23 @@
@@ -18,19 +19,31 @@ diff --git a/src/makefile b/src/makefile
 -LDFLAGS=-std=c++11 -pthread
 -SOURCES=$(wildcard *.cpp)
 -OBJECTS=$(SOURCES:.cpp=.o)
--EXECUTABLE=xlxd
--
--all: $(SOURCES) $(EXECUTABLE)
--
--$(EXECUTABLE): $(OBJECTS)
++CC      = gcc
++CXX     = g++
++CFLAGS  = -g -O3 -Wall -c -std=c++11 -pthread
++LDFLAGS = -g -O3 -Wall -std=c++11
++LIBS    = -lpthread
++LDFLAGS = -g
++
++SOURCES =$(wildcard *.cpp)
++OBJECTS =$(SOURCES:.cpp=.o)
++
+ EXECUTABLE=xlxd
+ 
+ all: $(SOURCES) $(EXECUTABLE)
+ 
+ $(EXECUTABLE): $(OBJECTS)
 -	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
--
--.cpp.o:
++	$(CXX) $(LDLAGS) $(LIBS) $(OBJECTS) -o $@
+ 
+ .cpp.o:
 -	$(CC) $(CFLAGS) $< -o $@
--
--clean:
--	$(RM) $(EXECUTABLE) *.o
--
++	$(CXX) -c  $(CFLAGS) $< -o $@
+ 
+ clean:
+ 	$(RM) $(EXECUTABLE) *.o
+ 
 -install:
 -	mkdir -p /xlxd
 -	cp -f $(EXECUTABLE) /xlxd/
@@ -43,26 +56,3 @@ diff --git a/src/makefile b/src/makefile
 -	[ -f /xlxd/xlxd.interlink ] && \
 -		cp ../config/xlxd.interlink /xlxd/xlxd.interlink.sample || \
 -		cp ../config/xlxd.interlink /xlxd/xlxd.interlink
-+CC      = gcc
-+CXX     = g++
-+CFLAGS  = -g -O3 -Wall -c -std=c++11 -pthread
-+LDFLAGS = -g -O3 -Wall -std=c++11
-+LIBS    = -lpthread
-+LDFLAGS = -g
-+
-+SOURCES =$(wildcard *.cpp)
-+OBJECTS =$(SOURCES:.cpp=.o)
-+
-+EXECUTABLE=xlxd
-+
-+all: $(SOURCES) $(EXECUTABLE)
-+
-+$(EXECUTABLE): $(OBJECTS)
-+	$(CXX) $(LDLAGS) $(LIBS) $(OBJECTS) -o $@
-+
-+.cpp.o:
-+	$(CXX) -c  $(CFLAGS) $< -o $@
-+
-+clean:
-+	$(RM) $(EXECUTABLE) *.o
-+
