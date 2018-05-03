@@ -1,0 +1,32 @@
+config mmdvmhost
+	option enabled '1'
+
+config ysfgateway
+	option enabled '0'
+
+config p25gateway
+	option enabled '0'
+
+config ysfreflector
+	option enabled '0'
+
+config ysfparrot
+	option enabled '0'
+
+config p25reflector
+	option enabled '0'
+
+config p25parrot
+	option enabled '0'
+
+config ysf2dmr
+	option enabled '0'
+
+config ysf2p25
+	option enabled '0'
+
+config dmrgateway
+	option enabled '0'
+
+config xlxd
+	option enabled '0'
