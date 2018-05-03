@@ -28,7 +28,7 @@ define Package/mmdvm-xlxd
   CATEGORY:=Network
   TITLE:=MMDVM XLXD
   URL:=https://github.com/LX3JL/xlxd
-  DEPENDS:=+uclibcxx +libpthread +libstdcpp
+  DEPENDS:=+uclibcxx +libpthread +libstdcpp +mmdvm-common
 endef
 
 define Package/mmdvm-xlxd/description
@@ -68,12 +68,13 @@ define Package/mmdvm-xlxd/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) ./files/etc/XLXD.ini $(1)/etc/XLXD.ini	
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/etc/init.d/xlxd.init $(1)/etc/init.d/xlxd
+	$(INSTALL_BIN) ./files/etc/init.d/xlxd $(1)/etc/init.d/xlxd
 	$(INSTALL_DIR) $(1)/etc/mmdvm
 	$(INSTALL_DIR) $(1)/etc/mmdvm/xlxd
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/config/* $(1)/etc/mmdvm/xlxd/
 	$(INSTALL_DATA) ./files/etc/mmdvm/xlxd/dmrid_cn.dat $(1)/etc/mmdvm/xlxd/dmrid.dat
 #	$(INSTALL_DATA) ./files/etc/mmdvm/xlxd/* $(1)/etc/mmdvm/xlxd/
+#	$(CP) -a files/* $(1)/
 endef
 
 define Package/mmdvm-xlxd/conffiles
@@ -83,8 +84,7 @@ endef
 define Package/mmdvm-xlxd/postinst
 #!/bin/sh
 if [ -e /etc/openwrt_release ]; then
-	/etc/init.d/xlxd stop || :
-	/etc/init.d/xlxd disable || :
+	echo ""
 fi
 exit 0
 endef
