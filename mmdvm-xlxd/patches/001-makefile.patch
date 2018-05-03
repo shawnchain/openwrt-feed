@@ -9,11 +9,10 @@ diff -uNr a/Makefile b/Makefile
 +clean:
 +	make -C src clean
 +
-diff --git a/src/makefile b/src/makefile
-index de1e0db..3f95390 100644
---- a/src/makefile
-+++ b/src/makefile
-@@ -1,30 +1,23 @@
+diff -uNr a/src/makefile b/src/makefile
+--- a/src/makefile	2018-03-05 12:27:35.451927965 +0800
++++ b/src/makefile	2018-03-05 12:32:48.884368983 +0800
+@@ -1,30 +1,22 @@
 -CC=g++
 -CFLAGS=-c -std=c++11 -pthread
 -LDFLAGS=-std=c++11 -pthread
@@ -28,7 +27,6 @@ index de1e0db..3f95390 100644
 +
 +SOURCES =$(wildcard *.cpp)
 +OBJECTS =$(SOURCES:.cpp=.o)
-+
  EXECUTABLE=xlxd
  
  all: $(SOURCES) $(EXECUTABLE)
@@ -39,7 +37,7 @@ index de1e0db..3f95390 100644
  
  .cpp.o:
 -	$(CC) $(CFLAGS) $< -o $@
-+	$(CXX) -c  $(CFLAGS) $< -o $@
++	$(CXX) -c $(CFLAGS) $< -o $@
  
  clean:
  	$(RM) $(EXECUTABLE) *.o
