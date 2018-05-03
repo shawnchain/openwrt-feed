@@ -28,7 +28,7 @@ define Package/ysf-clients
   CATEGORY:=Network
   TITLE:=YSFClients
   URL:=https://github.com/g4klx/YSFClients/
-  DEPENDS:=+uclibcxx +libpthread +libstdcpp
+  DEPENDS:=+uclibcxx +libpthread +libstdcpp +mmdvm-common
 endef
 
 define Package/ysf-clients/description
@@ -65,27 +65,14 @@ MAKE_FLAGS +=\
 define Package/ysf-clients/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/YSFGateway/YSFGateway $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_CONF) ./files/etc/YSFGateway.ini $(1)/etc/YSFGateway.ini	
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/etc/init.d/ysfgateway.init $(1)/etc/init.d/ysfgateway
 
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/YSFParrot/YSFParrot $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/etc/init.d/ysfparrot.init $(1)/etc/init.d/ysfparrot
 
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/YSFReflector/YSFReflector $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_CONF) ./files/etc/YSFReflector.ini $(1)/etc/YSFReflector.ini
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/etc/init.d/ysfreflector.init $(1)/etc/init.d/ysfreflector
-	$(INSTALL_DIR) $(1)/etc/mmdvm
-	$(INSTALL_CONF) ./files/etc/mmdvm/YSFHosts.txt $(1)/etc/mmdvm/
 
-	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) ./files/usr/sbin/YSFHostsupdate.sh $(1)/usr/sbin/
+	$(CP) -a files/* $(1)/
 endef
 
 define Package/ysf-clients/conffiles
