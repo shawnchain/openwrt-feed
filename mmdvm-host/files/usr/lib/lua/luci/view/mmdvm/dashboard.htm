@@ -1,0 +1,336 @@
+<%#
+ Copyright 2018 Shawn Chain <shawn.chain@gmail.com>
+-%>
+
+<%+header%>
+<style>
+
+a:link, a:visited {
+    text-decoration: none;
+    /*color: #0000e0;*/
+    font-weight: normal;
+}
+
+a.tooltip, a.tooltip:link, a.tooltip:visited, a.tooltip:active  {
+    text-decoration: none;
+    position: relative;
+    color: #FFFFFF;
+}
+
+a.tooltip:hover {
+    text-shadow: none;
+    text-decoration: none;
+    color: #FFFFFF;
+    background: transparent;
+}
+
+a.tooltip span {
+    text-shadow: none;
+    text-decoration: none;
+    display: none;
+}
+
+a.tooltip:hover span {
+    text-shadow: none;
+    text-decoration: none;
+    display: block;
+    position: absolute;
+    top: 20px;
+    left: 0;
+    width: 200px;
+    z-index: 100;
+    color: #000000;
+    border:1px solid #000000;
+    background: #f7f7f7;
+    font: 12px Verdana, sans-serif; 
+    text-align: left;
+}
+
+a.tooltip span b {
+    text-shadow: none;
+    text-decoration: none;
+    display: block;
+    color: #000000;
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    font-weight: bold;
+    border: 0px;
+    border-bottom: 1px solid black;
+    background: #d0d0d0;
+}
+
+a.tooltip2, a.tooltip2:link, a.tooltip2:visited, a.tooltip2:active  {
+    text-shadow: none;
+    text-decoration: none;
+    position: relative;
+    font-weight: bold;
+    color: #000000;
+}
+
+a.tooltip2:hover {
+    text-shadow: none;
+    text-decoration: none;
+    color: #000000;
+    background: transparent;
+}
+
+a.tooltip2 span {
+    text-shadow: none;
+    text-decoration: none;
+    display: none;
+}
+
+a.tooltip2:hover span {
+    text-shadow: none;
+    text-decoration: none;
+    display: block;
+    position: absolute;
+    top: 20px;
+    left: 0;
+    width: 200px;
+    z-index: 100;
+    color: #000000;
+    border:1px solid #000000;
+    background: #f7f7f7;
+    font: 12px Verdana, sans-serif; 
+    text-align: left;
+}
+
+a.tooltip2 span b {
+    text-shadow: none;
+    text-decoration: none;
+    display: block;
+    color: #000000;
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    font-weight: bold;
+    border: 0px;
+    border-bottom: 1px solid black;
+    background: #d0d0d0;
+}
+.header {
+    background : #dd4b39;
+    text-decoration : none;
+    color : #ffffff;
+    font-family : verdana, arial, sans-serif;
+    text-align : left;
+    padding : 5px 0px 5px 0px;
+    border-radius : 10px 10px 0 0;
+ }
+
+.nav {
+    /*float : left;*/
+    margin : 0;
+    padding : 3px 3px 3px 3px;
+    /*width : 160px;*/
+    /*background : #242d31;*/
+    font-weight : normal;
+    min-height : 100%;
+}
+
+.content {
+    /*margin : 0 0 0 166px;*/
+    padding : 1px 5px 5px 5px;
+    color : #000000;
+    background : #ffffff;
+    text-align: center;
+}
+
+.contentwide {
+    padding: 5px 5px 5px 5px;
+    color: #000000;
+    background: #ffffff;
+    text-align: center;
+}
+
+.footer {
+    background : #dd4b39;
+    text-decoration : none;
+    color : #ffffff;
+    font-family : verdana, arial, sans-serif;
+    font-size : 9px;
+    text-align : center;
+    padding : 10px 0 10px 0;
+    border-radius : 0 0 10px 10px;
+    clear : both;
+}
+table {
+    vertical-align: middle;
+    text-align: center;
+    empty-cells: show;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    border-collapse:collapse;
+    border-color: #000000;
+    border-style: solid;
+    border-spacing: 4px;
+    border-width: 2px;
+    text-decoration: none;
+    color: #ffffff;
+    background: #000000;
+    font-family: verdana,arial,sans-serif;
+    width: 100%;
+    white-space: nowrap;
+}
+
+table th {
+    font-family: "Lucidia Console",Monaco,monospace;
+    text-shadow: 1px 1px #8b0000;
+    text-decoration: none;
+    background: #dd4b39;
+    border: 1px solid #c0c0c0;
+}
+
+table tr:nth-child(even) {
+    background: #f7f7f7;
+}
+
+table tr:nth-child(odd) {
+    background: #d0d0d0;
+}
+
+table td {
+    color: #000000;
+    font-family: "Lucidia Console",Monaco,monospace;
+    text-decoration: none;
+    border: 1px solid #000000;
+    overflow-x: hidden;
+}
+</style>
+
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+
+<div id="content_lh_net" class="content">
+	<h2><%:Local RF Activity%></b></h2>
+	<table id="tbl_lh_rf"><tbody>
+		<tr>
+		<th><a class="tooltip" href="#">Time (CST)<span><b>Time in CST time zone</b></span></a></th>
+		<th><a class="tooltip" href="#">Mode<span><b>Transmitted Mode</b></span></a></th>
+		<th><a class="tooltip" href="#">Callsign<span><b>Callsign</b></span></a></th>
+		<th><a class="tooltip" href="#">Target<span><b>Target, D-Star Reflector, DMR Talk Group etc</b></span></a></th>
+		<th><a class="tooltip" href="#">Src<span><b>Recieved from source</b></span></a></th>
+		<th><a class="tooltip" href="#">Dur(s)<span><b>Duration in Seconds</b></span></a></th>
+		<th style="min-width:5ch"><a class="tooltip" href="#">BER<span><b>Bit Error Rate</b></span></a></th>
+		<th style="min-width:8ch"><a class="tooltip" href="#">RSSI<span><b>Received Signal Strength Indication</b></span></a></th>
+		</tr>
+		<tr><td colspan="8">Loading ... </td></tr>
+		<!-- javascript will update below rows
+		<tr><td align="left">23:03:54 May 12th</td><td align="left">YSF</td><td align="left"><a href="http://www.qrz.com/db/BG5HHP-2DR" target="_blank">BG5HHP-2DR</a></td><td align="left">ALL&nbsp;</td><td style="background:#1d1;">RF</td><td>4.6</td><td style="background:#1d1;">0.6%</td><td></td></tr>
+		<tr><td align="left">23:03:54 May 12th</td><td align="left">YSF</td><td align="left"><a href="http://www.qrz.com/db/BG5HHP-2DR" target="_blank">BG5HHP-2DR</a></td><td align="left">ALL&nbsp;</td><td style="background:#1d1;">RF</td><td>4.6</td><td style="background:#1d1;">0.6%</td><td></td></tr>
+		-->
+	</tbody></table>	  
+</div>
+<br/>
+<div id="content_lh_rf" class="content">
+	<h2><%:Gateway Activity%></b></h2>
+	<table id="tbl_lh_net">
+	  <tbody><tr>
+		<th><a class="tooltip" href="#">Time (CST)<span><b>Time in CST time zone</b></span></a></th>
+		<th><a class="tooltip" href="#">Mode<span><b>Transmitted Mode</b></span></a></th>
+		<th><a class="tooltip" href="#">Callsign<span><b>Callsign</b></span></a></th>
+		<th><a class="tooltip" href="#">Target<span><b>Target, D-Star Reflector, DMR Talk Group etc</b></span></a></th>
+		<th><a class="tooltip" href="#">Src<span><b>Recieved from source</b></span></a></th>
+		<th><a class="tooltip" href="#">Dur(s)<span><b>Duration in Seconds</b></span></a></th>
+		<th><a class="tooltip" href="#">Loss<span><b>Packet Loss</b></span></a></th>
+		<th><a class="tooltip" href="#">BER<span><b>Bit Error Rate</b></span></a></th>
+	  </tr>
+	  <tr><td colspan="8">Loading ... </td></tr>
+	<!-- javascript will update below rows
+	<tr><td align="left">23:25:43 May 12th</td><td align="left">YSF</td><td align="left"><a href="http://www.qrz.com/db/BD3BAY" target="_blank">BD3BAY</a></td><td align="left">ALL&nbsp;at&nbsp;BG5HHP&nbsp;</td><td>Net</td><td>1.4</td><td>0%</td><td>0.0%</td></tr>
+	<tr><td align="left">23:04:33 May 12th</td><td align="left">YSF</td><td align="left"><a href="http://www.qrz.com/db/BD7NJL" target="_blank">BD7NJL</a></td><td align="left">ALL&nbsp;at&nbsp;BG5HHP&nbsp;</td><td>Net</td><td>1.5</td><td>0%</td><td>0.0%</td></tr>
+	-->
+	  
+	</tbody></table>
+</div>
+
+<script type="text/javascript">//<![CDATA[
+	var tries = 0;
+	function ok() {
+		window.location = '<%=controller%>/admin/mmdvm/dashboard';
+	}
+	function appendNetTable(x){
+		var markup = "<tr><td align=\"left\">" + x.date + " " + x.time + "</td>";
+		markup += "<td align=\"left\">" + x.mode + "</td>";
+		markup += "<td align=\"left\"><a href=\"http://www.qrz.com/db/" + x.from + "\" target=\"_blank\">"+ x.from + "</a></td>";
+		markup += "<td align=\"left\">&nbsp;" +  x.to; 
+			if(x.via){markup += "&nbsp;at&nbsp;" + x.via};
+			markup += "&nbsp;</td>";
+		markup += "<td>" + x.type + "</td>"
+		markup += "<td>" + x.duration + "</td>"
+		markup += "<td>" + x.loss + "</td>"
+		markup += "<td>" + x.ber + "</td></tr>";
+		//console.log(markup)
+		$("#tbl_lh_net tbody").append(markup);
+	}
+	function appendRFTable(x){
+		var markup = "<tr><td align=\"left\">" + x.date + " " + x.time + "</td>";
+		markup += "<td align=\"left\">" + x.mode + "</td>";
+		markup += "<td align=\"left\"><a href=\"http://www.qrz.com/db/" + x.from + "\" target=\"_blank\">"+ x.from + "</a></td>";
+		markup += "<td align=\"left\">&nbsp;" +  x.to; 
+			if(x.via){markup += "&nbsp;at&nbsp;" + x.via};
+			markup += "&nbsp;</td>";
+		markup += "<td style=\"background:#1d1;\">" + x.type + "</td>"
+		if(x.duration){
+			markup += "<td>" + x.duration + "</td>"
+			// different color for ber
+			var _ber = Number(x.ber.replace("%",""));
+			if(_ber > 0 && _ber <= 1.9){
+				markup += "<td style=\"background:#1d1;\">" + x.ber + "</td>"
+			}else if(_ber >= 2.0 && _ber <= 4.9 ){
+				markup += "<td style=\"background:#fa0;\">" + x.ber + "</td>"
+			}else if(_ber > 4.9){
+				markup += "<td style=\"background:#f33;\">" + x.ber + "</td>"
+			}else{
+				markup += "<td>" + x.ber + "</td>"
+			}
+		}else{
+			markup += "<td style=\"background:#f33;\">TX</td>"
+			markup += "<td ></td>"
+		}
+		
+		
+		markup += "<td>" + (x.rssi?x.rssi:"") + "</td></tr>";
+		$("#tbl_lh_rf tbody").append(markup);
+	}
+	function updateTable(lastHeard){
+			// remove the last n-1 rows(keep the table headers)
+			var rows = $("#tbl_lh_rf tr")
+			if(rows.length > 1){
+				rows.slice(1 - rows.length).remove();
+			}
+			rows = $("#tbl_lh_net tr")
+			if(rows.length > 1){
+				rows.slice(1 - rows.length).remove();
+			}
+			// fill up with updated data
+			lastHeard.lh_net.forEach(function(x){
+				appendNetTable(x);
+			});
+			lastHeard.lh_rf.forEach(function(x){
+				appendRFTable(x);
+			});
+	}
+	function checkData() {
+		XHR.get('<%=REQUEST_URI%>/data', { check_dups: 1 ,offset:0}, function(x, data) {
+			updateTable(data)
+			window.setTimeout(checkData, 750);
+		});
+	}
+
+	window.onload = function(){
+		checkData()
+	}
+//]]></script>
+
+<!--
+<input class="cbi-button cbi-button-apply" type="button" value="<%:Restart MMDVMHost%>" onclick="restart(this)" />
+<p class="alert-message" style="display:none">
+	<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:middle" />
+	<span id="reboot-message"><%:Restarting MMDVMHost...%></span>
+</p>
+-->
+<%+footer%>
