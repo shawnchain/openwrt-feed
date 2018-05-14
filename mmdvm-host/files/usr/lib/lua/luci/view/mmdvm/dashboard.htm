@@ -3,205 +3,7 @@
 -%>
 
 <%+header%>
-<style>
-
-a:link, a:visited {
-    text-decoration: none;
-    /*color: #0000e0;*/
-    font-weight: normal;
-}
-
-a.tooltip, a.tooltip:link, a.tooltip:visited, a.tooltip:active  {
-    text-decoration: none;
-    position: relative;
-    color: #FFFFFF;
-}
-
-a.tooltip:hover {
-    text-shadow: none;
-    text-decoration: none;
-    color: #FFFFFF;
-    background: transparent;
-}
-
-a.tooltip span {
-    text-shadow: none;
-    text-decoration: none;
-    display: none;
-}
-
-a.tooltip:hover span {
-    text-shadow: none;
-    text-decoration: none;
-    display: block;
-    position: absolute;
-    top: 20px;
-    left: 0;
-    width: 200px;
-    z-index: 100;
-    color: #000000;
-    border:1px solid #000000;
-    background: #f7f7f7;
-    font: 12px Verdana, sans-serif; 
-    text-align: left;
-}
-
-a.tooltip span b {
-    text-shadow: none;
-    text-decoration: none;
-    display: block;
-    color: #000000;
-    margin: 0;
-    padding: 0;
-    font-size: 12px;
-    font-weight: bold;
-    border: 0px;
-    border-bottom: 1px solid black;
-    background: #d0d0d0;
-}
-
-a.tooltip2, a.tooltip2:link, a.tooltip2:visited, a.tooltip2:active  {
-    text-shadow: none;
-    text-decoration: none;
-    position: relative;
-    font-weight: bold;
-    color: #000000;
-}
-
-a.tooltip2:hover {
-    text-shadow: none;
-    text-decoration: none;
-    color: #000000;
-    background: transparent;
-}
-
-a.tooltip2 span {
-    text-shadow: none;
-    text-decoration: none;
-    display: none;
-}
-
-a.tooltip2:hover span {
-    text-shadow: none;
-    text-decoration: none;
-    display: block;
-    position: absolute;
-    top: 20px;
-    left: 0;
-    width: 200px;
-    z-index: 100;
-    color: #000000;
-    border:1px solid #000000;
-    background: #f7f7f7;
-    font: 12px Verdana, sans-serif; 
-    text-align: left;
-}
-
-a.tooltip2 span b {
-    text-shadow: none;
-    text-decoration: none;
-    display: block;
-    color: #000000;
-    margin: 0;
-    padding: 0;
-    font-size: 12px;
-    font-weight: bold;
-    border: 0px;
-    border-bottom: 1px solid black;
-    background: #d0d0d0;
-}
-.header {
-    background : #dd4b39;
-    text-decoration : none;
-    color : #ffffff;
-    font-family : verdana, arial, sans-serif;
-    text-align : left;
-    padding : 5px 0px 5px 0px;
-    border-radius : 10px 10px 0 0;
- }
-
-.nav {
-    /*float : left;*/
-    margin : 0;
-    padding : 3px 3px 3px 3px;
-    /*width : 160px;*/
-    /*background : #242d31;*/
-    font-weight : normal;
-    min-height : 100%;
-}
-
-.content {
-    /*margin : 0 0 0 166px;*/
-    padding : 1px 5px 5px 5px;
-    color : #000000;
-    background : #ffffff;
-    text-align: center;
-}
-
-.contentwide {
-    padding: 5px 5px 5px 5px;
-    color: #000000;
-    background: #ffffff;
-    text-align: center;
-}
-
-.footer {
-    background : #dd4b39;
-    text-decoration : none;
-    color : #ffffff;
-    font-family : verdana, arial, sans-serif;
-    font-size : 9px;
-    text-align : center;
-    padding : 10px 0 10px 0;
-    border-radius : 0 0 10px 10px;
-    clear : both;
-}
-table {
-    vertical-align: middle;
-    text-align: center;
-    empty-cells: show;
-    padding-left: 0px;
-    padding-right: 0px;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    border-collapse:collapse;
-    border-color: #000000;
-    border-style: solid;
-    border-spacing: 4px;
-    border-width: 2px;
-    text-decoration: none;
-    color: #ffffff;
-    background: #000000;
-    font-family: verdana,arial,sans-serif;
-    width: 100%;
-    white-space: nowrap;
-}
-
-table th {
-    font-family: "Lucidia Console",Monaco,monospace;
-    text-shadow: 1px 1px #8b0000;
-    text-decoration: none;
-    background: #dd4b39;
-    border: 1px solid #c0c0c0;
-}
-
-table tr:nth-child(even) {
-    background: #f7f7f7;
-}
-
-table tr:nth-child(odd) {
-    background: #d0d0d0;
-}
-
-table td {
-    color: #000000;
-    font-family: "Lucidia Console",Monaco,monospace;
-    text-decoration: none;
-    border: 1px solid #000000;
-    overflow-x: hidden;
-}
-</style>
-
+<link rel="stylesheet" type="text/css" href="/css/dashboard.css" />
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 
 <div id="content_lh_net" class="content">
@@ -248,10 +50,24 @@ table td {
 </div>
 
 <script type="text/javascript">//<![CDATA[
-	var tries = 0;
+    var lastHeard
 	function ok() {
 		window.location = '<%=controller%>/admin/mmdvm/dashboard';
 	}
+
+    /*remove the exist by compare the callsign and append to the begin of array*/
+    function updateLastHeardList(l,e){
+        for(i=0;i<l.length;i++){
+            if(l[i].from == e.from){
+                // found
+                l.splice(i,1);
+                //console.log("Update " + e.from)
+                break;
+            }
+        }
+        l.unshift(e);
+    }
+
 	function appendNetTable(x){
 		var markup = "<tr><td align=\"left\">" + x.date + " " + x.time + "</td>";
 		markup += "<td align=\"left\">" + x.mode + "</td>";
@@ -292,30 +108,62 @@ table td {
 			markup += "<td ></td>"
 		}
 		
-		
 		markup += "<td>" + (x.rssi?x.rssi:"") + "</td></tr>";
 		$("#tbl_lh_rf tbody").append(markup);
 	}
-	function updateTable(lastHeard){
-			// remove the last n-1 rows(keep the table headers)
-			var rows = $("#tbl_lh_rf tr")
-			if(rows.length > 1){
-				rows.slice(1 - rows.length).remove();
-			}
-			rows = $("#tbl_lh_net tr")
-			if(rows.length > 1){
-				rows.slice(1 - rows.length).remove();
-			}
-			// fill up with updated data
-			lastHeard.lh_net.forEach(function(x){
-				appendNetTable(x);
-			});
-			lastHeard.lh_rf.forEach(function(x){
-				appendRFTable(x);
-			});
+
+	function updateTable(x){
+        var changed = false;
+
+        if(!lastHeard){
+            lastHeard = x;
+            changed = true;
+        }else{
+            if(x.lh_net && x.lh_net.length > 0){
+                // update the cached lastHeard data
+                x.lh_net.forEach(function(e){
+                    updateLastHeardList(lastHeard.lh_net,e)
+                });
+                changed = true;
+            }
+            if(x.lh_rf && x.lh_rf.length > 0){
+                x.lh_rf.forEach(function(e){
+                    updateLastHeardList(lastHeard.lh_rf,e)
+                });
+                changed = true;
+            }
+        }
+
+        if(!changed){
+            //console.log("no data change");
+            return;
+        }
+
+        // update UI
+        // remove the last n-1 rows(keep the table headers)
+        var rows = $("#tbl_lh_rf tr")
+        if(rows.length > 1){
+            rows.slice(1 - rows.length).remove();
+        }
+        rows = $("#tbl_lh_net tr")
+        if(rows.length > 1){
+            rows.slice(1 - rows.length).remove();
+        }
+        // fill up with updated data
+        lastHeard.lh_net.forEach(function(x){
+            appendNetTable(x);
+        });
+        lastHeard.lh_rf.forEach(function(x){
+            appendRFTable(x);
+        });
+
 	}
 	function checkData() {
-		XHR.get('<%=REQUEST_URI%>/data', { check_dups: 1 ,offset:0}, function(x, data) {
+        var _params = {}
+        if(lastHeard && lastHeard.offset){
+            _params.offset = lastHeard.offset
+        }
+		XHR.get('<%=REQUEST_URI%>/data', _params, function(x, data) {
 			updateTable(data)
 			window.setTimeout(checkData, 750);
 		});

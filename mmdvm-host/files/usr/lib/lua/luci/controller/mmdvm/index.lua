@@ -7,10 +7,9 @@ function index()
                 return
         end
 
-        local _mod
         entry({"admin", "mmdvm"}, firstchild(), "MMDVM", 60).dependent=false
 
-        _mod = entry({"admin", "mmdvm", "dashboard"}, call("mmdvm_dashboard_action"), _("Dashboard") , 1)
+        local _mod = entry({"admin", "mmdvm", "dashboard"}, call("mmdvm_dashboard_action"), _("Dashboard") , 1)
         _mod.sysauth = "root"
         _mod.sysauth_authenticator = "htmlauth"
 
@@ -41,8 +40,7 @@ function index()
 end
 
 function mmdvm_dashboard_data()
-        local lh = mmdvm.last_heard()
-        lh.offset = 0
+        local lh = mmdvm.last_heard(luci.http.formvalue('offset'))
         luci.http.prepare_content("application/json")
         luci.http.write_json(lh)
 end
