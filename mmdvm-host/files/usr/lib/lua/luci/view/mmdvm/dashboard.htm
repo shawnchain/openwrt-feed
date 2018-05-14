@@ -84,7 +84,20 @@
 		$("#tbl_lh_net tbody").append(markup);
 	}
 	function appendRFTable(x){
-		var markup = "<tr><td align=\"left\">" + x.date + " " + x.time + "</td>";
+        var t;
+        if(x.timestamp){
+            var d = new Date(x.timestamp);
+            t = d.getFullYear()  + "-" + 
+                ("0" + (d.getMonth()+1)).slice(-2) + "-" + 
+                ("0" + d.getDate()).slice(-2) + " " + 
+                ("0" + d.getHours()).slice(-2) + ":" + 
+                ("0" + d.getMinutes()).slice(-2) + ":" + 
+                ("0" + d.getSeconds()).slice(-2) + "." + 
+                ("00" + d.getMilliseconds()).slice(-3);
+        }else{
+            t = x.date + " " + x.time;
+        }
+		var markup = "<tr><td align=\"left\">" + t + "</td>";
 		markup += "<td align=\"left\">" + x.mode + "</td>";
 		markup += "<td align=\"left\"><a href=\"http://www.qrz.com/db/" + x.from + "\" target=\"_blank\">"+ x.from + "</a></td>";
 		markup += "<td align=\"left\">&nbsp;" +  x.to; 

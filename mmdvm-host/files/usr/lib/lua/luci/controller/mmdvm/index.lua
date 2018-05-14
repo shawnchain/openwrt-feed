@@ -1,3 +1,5 @@
+-- Copyright 2018 BG5HHP (bg5hhp@hamclub.net)
+-- Licensed to the GPL v3 for non-commercial use only 
 module("luci.controller.mmdvm.index", package.seeall)
 
 local mmdvm = require("mmdvm")
@@ -9,18 +11,22 @@ function index()
 
         entry({"admin", "mmdvm"}, firstchild(), "MMDVM", 60).dependent=false
 
+        -- the dashboard UI
         local _mod = entry({"admin", "mmdvm", "dashboard"}, call("mmdvm_dashboard_action"), _("Dashboard") , 1)
         _mod.sysauth = "root"
         _mod.sysauth_authenticator = "htmlauth"
-
-        _mod = entry({"admin", "mmdvm", "config"}, call("mmdvm_cfg_action"), _("MMDVM CFG") , 1)
         entry({"admin", "mmdvm", "dashboard", "data"}, call("mmdvm_dashboard_data"))
 
-        _mod = entry({"admin", "mmdvm", "log"}, call("mmdvm_log_action"), _("MMDVM Log") , 2)
+        -- the log UI
+        _mod = entry({"admin", "mmdvm", "log"}, call("mmdvm_log_action"), _("MMDVM LOG") , 1)
         _mod.sysauth = "root"
         _mod.sysauth_authenticator = "htmlauth"
-
-	entry({"admin", "mmdvm", "restart", "call"}, post("mmdvm_restart_action"))
+        entry({"admin", "mmdvm", "restart", "call"}, post("mmdvm_restart_action"))
+        
+        -- the configuration UI
+        _mod = entry({"admin", "mmdvm", "config"}, call("mmdvm_cfg_action"), _("MMDVM CFG") , 2)
+        _mod.sysauth = "root"
+        _mod.sysauth_authenticator = "htmlauth"
 
         _mod = entry({"admin", "mmdvm", "ysfgwlog"}, call("ysfgw_log_action"), _("YSF Gateway Log"), 10)
         _mod.sysauth = "root"
