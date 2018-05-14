@@ -3,6 +3,7 @@
 -%>
 
 <%+header%>
+
 <link rel="stylesheet" type="text/css" href="/css/dashboard.css" />
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 
@@ -150,13 +151,16 @@
             rows.slice(1 - rows.length).remove();
         }
         // fill up with updated data
-        lastHeard.lh_net.forEach(function(x){
-            appendNetTable(x);
-        });
-        lastHeard.lh_rf.forEach(function(x){
-            appendRFTable(x);
-        });
-
+        if(lastHeard.lh_net){
+            lastHeard.lh_net.forEach(function(x){
+                appendNetTable(x);
+            });
+        }
+        if(lastHeard.lh_rf){
+            lastHeard.lh_rf.forEach(function(x){
+                appendRFTable(x);
+            });
+        }
 	}
 	function checkData() {
         var _params = {}
@@ -165,7 +169,7 @@
         }
 		XHR.get('<%=REQUEST_URI%>/data', _params, function(x, data) {
 			updateTable(data)
-			window.setTimeout(checkData, 750);
+			window.setTimeout(checkData, 500);
 		});
 	}
 
