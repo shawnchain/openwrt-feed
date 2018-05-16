@@ -101,9 +101,26 @@
 		}else{
 			markup += "<td>" + x.type + "</td>";
 		}
-		markup += "<td>" + x.duration + "</td>"
-		markup += "<td>" + (x.loss?x.loss:"0%") + "</td>"
-		markup += "<td>" + x.ber + "</td></tr>";
+		if(x.duration){
+			markup += "<td>" + x.duration + "</td>"
+			markup += "<td>" + (x.loss?x.loss:"0%") + "</td>"
+			
+			// different color for ber
+			var _ber = Number(x.ber.replace("%",""));
+			if(_ber > 0 && _ber <= 1.9){
+				markup += "<td style=\"background:#1d1;\">" + x.ber + "</td>"
+			}else if(_ber >= 2.0 && _ber <= 4.9 ){
+				markup += "<td style=\"background:#fa0;\">" + x.ber + "</td>"
+			}else if(_ber > 4.9){
+				markup += "<td style=\"background:#f33;\">" + x.ber + "</td>"
+			}else{
+				markup += "<td>" + x.ber + "</td>"
+			}
+			// markup += "<td>" + x.ber + "</td></tr>";
+		}else{
+			markup += "<td colspan=3 style=\"background:#f33;\">TX</td>"
+		}
+
 		//console.log(markup)
 		$("#tbl_lh_all tbody").append(markup);
 	}
