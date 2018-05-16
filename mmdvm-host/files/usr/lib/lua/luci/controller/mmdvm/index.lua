@@ -28,6 +28,7 @@ function index()
         _mod.sysauth = "root"
         _mod.sysauth_authenticator = "htmlauth"
 
+        --[[
         _mod = entry({"admin", "mmdvm", "ysfgwlog"}, call("ysfgw_log_action"), _("YSF Gateway Log"), 10)
         _mod.sysauth = "root"
         _mod.sysauth_authenticator = "htmlauth"
@@ -43,6 +44,7 @@ function index()
         _mod = entry({"admin", "mmdvm", "p25rllog"}, call("p25rl_log_action"), _("P25 Reflector Log"), 40)
         _mod.sysauth = "root"
         _mod.sysauth_authenticator = "htmlauth"
+        ]]
 end
 
 function mmdvm_dashboard_data()
