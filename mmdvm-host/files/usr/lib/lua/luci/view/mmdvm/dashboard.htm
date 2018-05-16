@@ -156,8 +156,12 @@
 		$("#tbl_lh_rf tbody").append(markup);
 	}
 
-	function mergetNetAndRFActivities(x){
-		if(x.lh_all) return;
+	// merges the RF and NET activities into rf_all
+	function mergeActivities(x){
+		// if(x.lh_all){
+		// 	console.log("skip merging activities");
+		// 	return;
+		// }
 		var lh_all = [];
 		if(x.lh_net){
 			x.lh_net.forEach(function(e){
@@ -169,7 +173,12 @@
 				lh_all.push(e);
 			});
 		}
-		lh_all.sort(function compare(a,b){
+		x.lh_all = lh_all;
+		return x;
+	}
+	// sort all actitivies in the info data
+	function sortActivities(x){
+		var cmp = function compare(a,b){
 			if(a.timestamp > b.timestamp){
 				return -1;
 			}else if(a.timestamp < b.timestamp){
@@ -177,13 +186,24 @@
 			}else{
 				return 0;
 			}
-		});
-		x.lh_all = lh_all;
+		};
+		if(x.lh_all){
+			x.lh_all.sort(cmp);
+		}
+		if(x.lh_rf){
+			x.lh_rf.sort(cmp);
+		}
+		if(x.lh_net){
+			x.lh_net.sort(cmp);
+		}
 	}
 
+	// update table with data updated
 	function updateTable(x){
         var changed = false;
-		mergetNetAndRFActivities(x);
+		mergeActivities(x);
+		//console.log(">>will update table with data")
+		//console.log(x);
         if(!lastHeard){
             lastHeard = x;
             changed = true;
@@ -207,7 +227,10 @@
             //console.log("no data change");
             return;
         }
-
+		// sort with time descending
+		sortActivities(lastHeard);
+		//console.log(">>updating table with sorted data");
+		//console.log(x);
         // update UI
         // remove the last n-1 rows(keep the table headers)
         var rows = $("#tbl_lh_rf tr")
@@ -220,30 +243,43 @@
         }
         // fill up with updated data
         if(lastHeard.lh_all){
-            lastHeard.lh_all.forEach(function(x){
-                appendGatewayTable(x);
+            lastHeard.lh_all.forEach(function(e){
+                appendGatewayTable(e);
             });
         }
         if(lastHeard.lh_rf){
-            lastHeard.lh_rf.forEach(function(x){
-                appendRFTable(x);
+            lastHeard.lh_rf.forEach(function(e){
+                appendRFTable(e);
             });
         }
 	}
+	var count = 0
+	var _params = {}
 	function checkData() {
-        var _params = {}
+		/*
         if(lastHeard && lastHeard.offset){
             _params.offset = lastHeard.offset
         }
-		XHR.get('<%=REQUEST_URI%>/data', _params, function(x, data) {
+		XHR.get('<%=REQUEST_URI%>/data?v=1', _params, function(x, data) {
 			updateTable(data)
-			window.setTimeout(checkData, 500);
+			count++;
+			if(count < 2)
+				window.setTimeout(checkData, 5000);
+		});
+		*/
+
+		XHR.poll(1, '<%=REQUEST_URI%>/data?v=2' , _params, function(x, data){
+			if(lastHeard && lastHeard.offset){
+			    _params.offset = lastHeard.offset
+        	}
+			updateTable(data)
 		});
 	}
-
+	
 	window.onload = function(){
 		checkData()
 	}
+	
 //]]></script>
 
 <!--
