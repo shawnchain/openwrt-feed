@@ -7,7 +7,30 @@
 <link rel="stylesheet" type="text/css" href="/css/dashboard.css" />
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 
-<div id="content_lh_net" class="content">
+<div id="content_lh_rf" class="content">
+	<h2><%:Gateway Activity%></b></h2>
+	<table id="tbl_lh_all">
+	  <tbody><tr>
+		<th><a class="tooltip" href="#">Time (CST)<span><b>Time in CST time zone</b></span></a></th>
+		<th><a class="tooltip" href="#">Mode<span><b>Transmitted Mode</b></span></a></th>
+		<th><a class="tooltip" href="#">Callsign<span><b>Callsign</b></span></a></th>
+		<th><a class="tooltip" href="#">Target<span><b>Target, D-Star Reflector, DMR Talk Group etc</b></span></a></th>
+		<th><a class="tooltip" href="#">Src<span><b>Recieved from source</b></span></a></th>
+		<th><a class="tooltip" href="#">Dur(s)<span><b>Duration in Seconds</b></span></a></th>
+		<th><a class="tooltip" href="#">Loss<span><b>Packet Loss</b></span></a></th>
+		<th><a class="tooltip" href="#">BER<span><b>Bit Error Rate</b></span></a></th>
+	  </tr>
+	  <tr><td colspan="8">Loading ... </td></tr>
+	<!-- javascript will update below rows
+	<tr><td align="left">23:25:43 May 12th</td><td align="left">YSF</td><td align="left"><a href="http://www.qrz.com/db/BD3BAY" target="_blank">BD3BAY</a></td><td align="left">ALL&nbsp;at&nbsp;BG5HHP&nbsp;</td><td>Net</td><td>1.4</td><td>0%</td><td>0.0%</td></tr>
+	<tr><td align="left">23:04:33 May 12th</td><td align="left">YSF</td><td align="left"><a href="http://www.qrz.com/db/BD7NJL" target="_blank">BD7NJL</a></td><td align="left">ALL&nbsp;at&nbsp;BG5HHP&nbsp;</td><td>Net</td><td>1.5</td><td>0%</td><td>0.0%</td></tr>
+	-->
+	  
+	</tbody></table>
+</div>
+<br/>
+
+<div id="content_lh_all" class="content">
 	<h2><%:Local RF Activity%></b></h2>
 	<table id="tbl_lh_rf"><tbody>
 		<tr>
@@ -28,27 +51,6 @@
 	</tbody></table>	  
 </div>
 <br/>
-<div id="content_lh_rf" class="content">
-	<h2><%:Gateway Activity%></b></h2>
-	<table id="tbl_lh_net">
-	  <tbody><tr>
-		<th><a class="tooltip" href="#">Time (CST)<span><b>Time in CST time zone</b></span></a></th>
-		<th><a class="tooltip" href="#">Mode<span><b>Transmitted Mode</b></span></a></th>
-		<th><a class="tooltip" href="#">Callsign<span><b>Callsign</b></span></a></th>
-		<th><a class="tooltip" href="#">Target<span><b>Target, D-Star Reflector, DMR Talk Group etc</b></span></a></th>
-		<th><a class="tooltip" href="#">Src<span><b>Recieved from source</b></span></a></th>
-		<th><a class="tooltip" href="#">Dur(s)<span><b>Duration in Seconds</b></span></a></th>
-		<th><a class="tooltip" href="#">Loss<span><b>Packet Loss</b></span></a></th>
-		<th><a class="tooltip" href="#">BER<span><b>Bit Error Rate</b></span></a></th>
-	  </tr>
-	  <tr><td colspan="8">Loading ... </td></tr>
-	<!-- javascript will update below rows
-	<tr><td align="left">23:25:43 May 12th</td><td align="left">YSF</td><td align="left"><a href="http://www.qrz.com/db/BD3BAY" target="_blank">BD3BAY</a></td><td align="left">ALL&nbsp;at&nbsp;BG5HHP&nbsp;</td><td>Net</td><td>1.4</td><td>0%</td><td>0.0%</td></tr>
-	<tr><td align="left">23:04:33 May 12th</td><td align="left">YSF</td><td align="left"><a href="http://www.qrz.com/db/BD7NJL" target="_blank">BD7NJL</a></td><td align="left">ALL&nbsp;at&nbsp;BG5HHP&nbsp;</td><td>Net</td><td>1.5</td><td>0%</td><td>0.0%</td></tr>
-	-->
-	  
-	</tbody></table>
-</div>
 
 <script type="text/javascript">//<![CDATA[
     var lastHeard
@@ -69,22 +71,9 @@
         l.unshift(e);
     }
 
-	function appendNetTable(x){
-		var markup = "<tr><td align=\"left\">" + x.date + " " + x.time + "</td>";
-		markup += "<td align=\"left\">" + x.mode + "</td>";
-		markup += "<td align=\"left\"><a href=\"http://www.qrz.com/db/" + x.from + "\" target=\"_blank\">"+ x.from + "</a></td>";
-		markup += "<td align=\"left\">&nbsp;" +  x.to; 
-			if(x.via){markup += "&nbsp;at&nbsp;" + x.via};
-			markup += "&nbsp;</td>";
-		markup += "<td>" + x.type + "</td>"
-		markup += "<td>" + x.duration + "</td>"
-		markup += "<td>" + x.loss + "</td>"
-		markup += "<td>" + x.ber + "</td></tr>";
-		//console.log(markup)
-		$("#tbl_lh_net tbody").append(markup);
-	}
-	function appendRFTable(x){
-        var t;
+	// The timestamp
+	function fixTimeOffset(x){
+		var t;
         if(x.timestamp){
             var d = new Date(x.timestamp);
             t = d.getFullYear()  + "-" + 
@@ -97,6 +86,30 @@
         }else{
             t = x.date + " " + x.time;
         }
+		return t
+	}
+
+	function appendGatewayTable(x){
+		var markup = "<tr><td align=\"left\">" + x.date + " " + x.time + "</td>";
+		markup += "<td align=\"left\">" + x.mode + "</td>";
+		markup += "<td align=\"left\"><a href=\"http://www.qrz.com/db/" + x.from + "\" target=\"_blank\">"+ x.from + "</a></td>";
+		markup += "<td align=\"left\">&nbsp;" +  x.to; 
+			if(x.via){markup += "&nbsp;at&nbsp;" + x.via};
+			markup += "&nbsp;</td>";
+		if(x.type == "RF"){
+			markup += "<td style=\"background:#1d1;\">" + x.type + "</td>";
+		}else{
+			markup += "<td>" + x.type + "</td>";
+		}
+		markup += "<td>" + x.duration + "</td>"
+		markup += "<td>" + (x.loss?x.loss:"0%") + "</td>"
+		markup += "<td>" + x.ber + "</td></tr>";
+		//console.log(markup)
+		$("#tbl_lh_all tbody").append(markup);
+	}
+
+	function appendRFTable(x){
+        var t = fixTimeOffset(x);
 		var markup = "<tr><td align=\"left\">" + t + "</td>";
 		markup += "<td align=\"left\">" + x.mode + "</td>";
 		markup += "<td align=\"left\"><a href=\"http://www.qrz.com/db/" + x.from + "\" target=\"_blank\">"+ x.from + "</a></td>";
@@ -126,17 +139,42 @@
 		$("#tbl_lh_rf tbody").append(markup);
 	}
 
+	function mergetNetAndRFActivities(x){
+		if(x.lh_all) return;
+		var lh_all = [];
+		if(x.lh_net){
+			x.lh_net.forEach(function(e){
+				lh_all.push(e);
+			});
+		}
+		if(x.lh_rf){
+			x.lh_rf.forEach(function(e){
+				lh_all.push(e);
+			});
+		}
+		lh_all.sort(function compare(a,b){
+			if(a.timestamp > b.timestamp){
+				return -1;
+			}else if(a.timestamp < b.timestamp){
+				return 1;
+			}else{
+				return 0;
+			}
+		});
+		x.lh_all = lh_all;
+	}
+
 	function updateTable(x){
         var changed = false;
-
+		mergetNetAndRFActivities(x);
         if(!lastHeard){
             lastHeard = x;
             changed = true;
         }else{
-            if(x.lh_net && x.lh_net.length > 0){
+            if(x.lh_all && x.lh_all.length > 0){
                 // update the cached lastHeard data
-                x.lh_net.forEach(function(e){
-                    updateLastHeardList(lastHeard.lh_net,e)
+                x.lh_all.forEach(function(e){
+                    updateLastHeardList(lastHeard.lh_all,e)
                 });
                 changed = true;
             }
@@ -159,14 +197,14 @@
         if(rows.length > 1){
             rows.slice(1 - rows.length).remove();
         }
-        rows = $("#tbl_lh_net tr")
+        rows = $("#tbl_lh_all tr")
         if(rows.length > 1){
             rows.slice(1 - rows.length).remove();
         }
         // fill up with updated data
-        if(lastHeard.lh_net){
-            lastHeard.lh_net.forEach(function(x){
-                appendNetTable(x);
+        if(lastHeard.lh_all){
+            lastHeard.lh_all.forEach(function(x){
+                appendGatewayTable(x);
             });
         }
         if(lastHeard.lh_rf){
