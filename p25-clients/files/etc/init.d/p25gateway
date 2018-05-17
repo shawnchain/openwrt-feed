@@ -32,6 +32,11 @@ do_start() {
 }
 
 start() {
+  check_enabled
+  if [ $? -eq 0 ]; then
+    >&2 echo "${PKG_NAME} is disabled"
+    return 0
+  fi
 	check_running
   if [ $? -eq 0 ]; then
     return 0
