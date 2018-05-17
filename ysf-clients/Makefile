@@ -92,4 +92,4 @@ fi
 exit 0
 endef
 
-$(eval $(call BuildPackage,ysf-clients,+uclibcxx,+libpthread,+libstdc++))
+$(eval $(call BuildPackage,ysf-clients,+uclibcxx,+libpthread,+libstdc++,+mmdvm-common))

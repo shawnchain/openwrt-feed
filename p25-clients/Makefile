@@ -80,4 +80,4 @@ fi
 exit 0
 endef
 
-$(eval $(call BuildPackage,p25-clients,+libpthread,+libstdc++))
+$(eval $(call BuildPackage,p25-clients,+libpthread,+libstdc++,+mmdvm-common))

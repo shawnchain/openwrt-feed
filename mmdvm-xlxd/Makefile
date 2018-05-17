@@ -89,4 +89,4 @@ fi
 exit 0
 endef
 
-$(eval $(call BuildPackage,mmdvm-xlxd,+uclibcxx,+libpthread,+libstdc++))
+$(eval $(call BuildPackage,mmdvm-xlxd,+uclibcxx,+libpthread,+libstdc++,+mmdvm-common))

@@ -54,6 +54,11 @@ check_running(){
 check_enabled(){
   local _pkgname=$(echo $PKG_NAME | tr "[A-Z]" "[a-z]" | tr -d "-") # to lowercase and delete '-'
   local __en=$(uci -q get mmdvm.@${_pkgname}[0].enabled)
-  [ -z $__en ] || [ $__en -eq 0 ] || return 1
-  return 0
+  if [ -z $__en ];then
+    return 0
+  fi
+  if [ $__en -eq 0 ];then
+    return 0
+  fi
+  return 1
 }
