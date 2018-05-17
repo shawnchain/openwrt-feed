@@ -15,7 +15,10 @@ function index()
         local _mod = entry({"admin", "mmdvm", "dashboard"}, call("mmdvm_dashboard_action"), _("Dashboard") , 1)
         _mod.sysauth = "root"
         _mod.sysauth_authenticator = "htmlauth"
+
         entry({"admin", "mmdvm", "dashboard", "data"}, call("mmdvm_dashboard_data"))
+
+        entry({"mmdvm", "dashboard", "data"}, call("mmdvm_dashboard_data")).dependent=false
 
         -- the log UI
         _mod = entry({"admin", "mmdvm", "log"}, call("mmdvm_log_action"), _("MMDVM LOG") , 1)

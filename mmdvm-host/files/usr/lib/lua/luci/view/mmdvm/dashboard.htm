@@ -90,7 +90,8 @@
 	}
 
 	function appendGatewayTable(x){
-		var markup = "<tr><td align=\"left\">" + x.date + " " + x.time + "</td>";
+		var t = fixTimeOffset(x);
+		var markup = "<tr><td align=\"left\">" + t + "</td>";
 		markup += "<td align=\"left\">" + x.mode + "</td>";
 		markup += "<td align=\"left\"><a href=\"http://www.qrz.com/db/" + x.from + "\" target=\"_blank\">"+ x.from + "</a></td>";
 		markup += "<td align=\"left\">&nbsp;" +  x.to; 
