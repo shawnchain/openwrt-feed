@@ -73,7 +73,8 @@ function mmdvm_dashboard_action()
 end
 
 function mmdvm_restart_action()
-	luci.util.exec("echo restarted >>/var/log/MMDVM-$(date -u +%Y-%m-%d).log")	
+        -- luci.util.exec("echo restarted >>/var/log/MMDVM-$(date -u +%Y-%m-%d).log")	
+        luci.util.exec("[ -f /etc/init.d/mmdvmhost ] && /etc/init.d/mmdvmhost restart")
 end
 
 function mmdvm_cfg_action()
