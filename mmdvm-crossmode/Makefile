@@ -66,7 +66,7 @@ define Package/mmdvm-crossmode/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/YSF2P25/YSF2P25 $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/YSF2DMR/YSF2DMR $(1)/usr/sbin/
-  $(INSTALL_BIN) $(PKG_BUILD_DIR)/DMR2YSF/DMR2YSF $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/DMR2YSF/DMR2YSF $(1)/usr/sbin/
 	$(CP) -a files/* $(1)/
 endef
 
