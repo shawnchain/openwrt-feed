@@ -254,8 +254,10 @@
             });
         }
 	}
-	var count = 0
-	var _params = {}
+	var count = 0;
+	var _params = {
+		v:2,
+	};
 	function checkData() {
 		/*
         if(lastHeard && lastHeard.offset){
@@ -269,7 +271,7 @@
 		});
 		*/
 
-		XHR.poll(1, '<%=REQUEST_URI%>/data?v=2' , _params, function(x, data){
+		XHR.poll(1, '<%=REQUEST_URI%>/data' , _params, function(x, data){
 			if(lastHeard && lastHeard.offset){
 			    _params.offset = lastHeard.offset
         	}
