@@ -9,13 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mmdvm-host
 #PKG_REV:=HEAD
-PKG_REV:=794d1c5
-PKG_VERSION:=BG5HHP-20180522-RPT
+#PKG_REV:=34ceb91
+PKG_REV:=JitterBuffer
+PKG_VERSION:=20180621
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-#PKG_SOURCE_URL:=https://github.com/g4klx/MMDVMHost
-PKG_SOURCE_URL:=https://github.com/mclub/MMDVMHost
+PKG_SOURCE_URL:=https://github.com/g4klx/MMDVMHost
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=git
@@ -68,8 +68,6 @@ endef
 
 define Package/mmdvm-host/conffiles
 /etc/MMDVM.ini
-/etc/config/mmdvm
-/etc/mmdvm/DMRIds.dat
 endef
 
 define Package/mmdvm-host/postinst
@@ -79,7 +77,7 @@ if [ -e /etc/openwrt_release ]; then
 	cat /etc/rc.local |grep "mmdvm-network-helper.sh" >/dev/null
 	if [ $$? -ne 0 ]; then
 		#insert the helper command before exit 0
-		echo "Updating /etc/rc.local ... "
+		#echo "Updating /etc/rc.local ... "
 		sed -i '/exit 0/ i /usr/sbin/mmdvm-network-helper.sh & 2>/dev/null' /etc/rc.local
 	fi
 fi
