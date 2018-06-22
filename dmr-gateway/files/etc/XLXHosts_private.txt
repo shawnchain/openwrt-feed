@@ -1,4 +1,0 @@
-# The format of this file is:
-# XLX Number;host;default
-996;115.238.33.158;4004
-
