@@ -1,0 +1,22 @@
+M: 2018-04-30 11:09:32.389 MMDVMHost-BG5HHP-mod-20171115 is starting
+M: 2018-04-30 11:09:32.389 Built 16:09:53 Apr 24 2018 (GitID #c2e8e85)
+I: 2018-04-30 11:09:34.471 MMDVM protocol version: 1, description: MMDVM_HS ADF7021 v1.0.1 20170826 (DStar/DMR/YSF/P25) GitID #2beb3d7
+M: 2018-04-30 11:09:34.499 MMDVMHost-BG5HHP-mod-20171115 is running
+
+M: 2017-07-08 15:16:14.571 YSF, received RF data from 2E0EHH     to ALL
+M: 2017-07-08 15:16:19.551 YSF, received RF end of transmission, 5.1 seconds, BER: 3.8%
+
+M: 2018-04-30 11:11:44.383 YSF, received RF header from BG5HHP-2DR to ALL
+M: 2018-04-30 11:11:44.682 YSF, received RF end of transmission, 0.4 seconds
+
+M: 2018-04-30 11:27:26.830 YSF, received network data from            to ALL        at BG5HHP
+M: 2018-04-30 11:27:27.115 YSF, received network end of transmission, 0.4 seconds, 0% packet loss, BER: 0.0%
+
+M: 2018-04-30 12:12:01.174 YSF, received network data from      BD1RT to ALL        at BG5HHP    
+M: 2018-04-30 12:12:20.930 YSF, network watchdog has expired, 18.2 seconds, 0% packet loss, BER: 0.0%
+
+M: 2017-04-18 08:00:41.977 P25, received RF transmission from MW0MWZ to TG 10200
+M: 2017-04-18 08:00:42.337 P25, received RF end of transmission, 0.4 seconds, BER: 0.0%
+
+M: 2018-05-11 08:54:08.732 P25, received network transmission from BD3BAY to TG 10402
+M: 2018-05-11 08:54:20.436 P25, network end of transmission, 12.1 seconds, 1% packet loss
