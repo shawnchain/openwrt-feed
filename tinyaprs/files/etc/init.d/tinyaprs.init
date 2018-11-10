@@ -72,7 +72,7 @@ do_start() {
 	#mkdir -m 0755 -p /var/log/tinyaprs
 	#echo "Starting tinyaprs"
 	if [ -e /etc/tinyaprs.conf ]; then
-		/usr/sbin/tinyaprs -d
+		/usr/sbin/tinyaprsd -d
 		>&2 echo "TinyAPRS started"
 	else
 		>&2 echo "configuration file missing, TinyAPRS will not start"

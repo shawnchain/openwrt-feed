@@ -9,22 +9,21 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tinyaprs
 PKG_REV:=HEAD
-PKG_VERSION:=0.5.4
-PKG_RELEASE:=
+PKG_VERSION:=1.0
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=https://github.com/shawnchain/tinyaprs-gate/trunk
-#PKG_SOURCE_URL:=https://github.com/shawnchain/tinyaprs-gate/tags/1.0
+PKG_SOURCE_URL:=https://github.com/shawnchain/tinyaprs-gate
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
-PKG_SOURCE_PROTO:=svn
+PKG_SOURCE_PROTO:=git
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/tinyaprs
   SECTION:=net
   CATEGORY:=Network
-  TITLE:=Tiny APRS RX only I-gate by BG5HHP
+  TITLE:=Tiny APRS I-gate daemon by BG5HHP
   URL:=https://github.com/shawnchain/tinyaprs-gate/
   DEPENDS:=
 endef
@@ -34,11 +33,11 @@ define Package/tinyaprs/description
 	It then forwards appropriate packets to APRS-IS servers.
 endef
 
-#TARGET_CFLAGS = -std=c99
+#TARGET_CFLAGS += -std=c99 -DOPENWRT=1
 
 define Package/tinyaprs/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/tinyaprs $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/tinyaprsd $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/tinyaprs-util $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/tinyaprs-cfg $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
